@@ -3,7 +3,7 @@ A public installation script for Pterodactyl Panel and Daemon
 <b> This command will only work with Linux OS, it will not work with Windows </b>
 <i> To run this command type the commands below </i>
 <p></p>
-<p><b><i>cd /*Moves into the root directory</b></i></p>
+<p><b><i>cd</b></i>  /*Moves into the root directory</p>
 <p><b><i>cd Pterodactyl-Installation-Script</b></i></p>
 <p><b><i>chmod +x install.sh</b></i></p>
 <p><b><i>./install.sh</b></i></p>
