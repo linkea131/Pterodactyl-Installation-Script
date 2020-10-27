@@ -557,7 +557,7 @@ install_pterodactyl() {
     output "Downloading Pterodactyl..."
     mkdir -p /var/www/pterodactyl
     cd /var/www/pterodactyl
-    curl -Lo panel.tar.gz https://github.com/pterodactyl/panel/releases/download/v0.7.19/panel.tar.gz
+    curl -Lo panel.tar.gz https://github.com/pterodactyl/panel/releases/download/v1.0.3/panel.tar.gz
     tar --strip-components=1 -xzvf panel.tar.gz
     chmod -R 755 storage/* bootstrap/cache/
 
@@ -640,7 +640,7 @@ EOF
 upgrade_pterodactyl(){
     cd /var/www/pterodactyl
     php artisan down
-    curl -L https://github.com/pterodactyl/panel/releases/download/v0.7.19/panel.tar.gz | tar --strip-components=1 -xzv
+    curl -L https://github.com/pterodactyl/panel/releases/download/v1.0.3/panel.tar.gz | tar --strip-components=1 -xzv
     chmod -R 755 storage/* bootstrap/cache
     composer install --no-dev --optimize-autoloader
     php artisan view:clear
