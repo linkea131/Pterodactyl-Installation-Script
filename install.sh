@@ -155,13 +155,13 @@ os_check(){
 
 install_options(){
     output "Please select your installation option:"
-    output "[1] Install the panel"
+    output "[1] Install the panel to 1.0.3"
     output "[2] Install the daemon"
     output "[3] Install the panel and daemon"
     output "[4] Install the standalone SFTP server"
-    output "[5] Upgrade 0.7.x panel to 0.7.19."
-    output "[6] Upgrade 0.6.x daemon to 0.6.13."
-    output "[7] Upgrade the panel to 0.7.19 and daemon to 0.6.13"
+    output "[5] Currently unavailable"
+    output "[6] Currently unavailable"
+    output "[7] Upgrade the panel to 1.0.3 and daemon to 0.6.13"
     output "[8] Upgrade the standalone SFTP server to 1.0.5."
     output "[9] Make Pterodactyl compatible with the mobile app (only use this after you have installed the panel - check out https://pterodactyl.cloud for more information)."
     output "[10] Update mobile compatibility."
