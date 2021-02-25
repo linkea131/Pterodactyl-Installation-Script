@@ -7,7 +7,7 @@ This command will only work with Linux OS, it will not work with Windows <br />
 <p><b><i>./install.sh</b></i></p>
 <p>Or the quick way</p> <br /> 
 
-``curl -Ls https://api.github.com/repos/ItsLeon15/Pterodactyl-Installation-Script/releases/latest | grep -wo "https.*install.sh" | wget -qi -`` <br /> 
+``curl -L https://raw.githubusercontent.com/ItsLeon15/Pterodactyl-Installation-Script/main/install.sh > install.sh | chmod +x install.sh; ./install.sh`` <br /> 
 
 <br /> 
 
