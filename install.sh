@@ -16,11 +16,7 @@ PHPMYADMIN=5.0.4
 
 preflight(){
     output "Pterodactyl Installation & Upgrade Script"
-    output "Copyright © 2020 Thien Tran <contact@thientran.io>."
-    output "Please join my Telegram for community support: https://t.me/revenact"
     output ""
-
-    output "Please note that this script is meant to be installed on a fresh OS. Installing it on a non-fresh OS may cause problems."
     output "Automatic operating system detection initialized..."
 
     os_check
@@ -33,10 +29,10 @@ preflight(){
     output "Automatic architecture detection initialized..."
     MACHINE_TYPE=`uname -m`
     if [ ${MACHINE_TYPE} == 'x86_64' ]; then
-        output "64-bit server detected! Good to go."
+        output "All good to go."
         output ""
     else
-        output "Unsupported architecture detected! Please switch to 64-bit (x86_64)."
+        output "Please switch to 64-bit (x86_64)."
         exit 4
     fi
 
@@ -163,25 +159,16 @@ os_check(){
 install_options(){
     output "Please select your installation option:"
     output "[1] Install the panel ${PANEL}."
-    output "[2] Install the panel ${PANEL_LEGACY}."
     output "[3] Install the wings ${WINGS}."
-    output "[4] Install the daemon ${DAEMON_LEGACY}."
     output "[5] Install the panel ${PANEL} and wings ${WINGS}."
-    output "[6] Install the panel ${PANEL_LEGACY} and daemon ${DAEMON_LEGACY}."
     output "[7] Install the standalone SFTP server."
     output "[8] Upgrade (1.x) panel to ${PANEL}."
     output "[9] Upgrade (0.7.x) panel to ${PANEL}."
-    output "[10] Upgrade (0.7.x) panel to ${PANEL_LEGACY}."
-    output "[11] Upgrade (0.6.x) daemon to ${DAEMON_LEGACY}."
     output "[12] Migrating daemon to wings."
     output "[13] Upgrade the panel to ${PANEL} and Migrate to wings"
-    output "[14] Upgrade the panel to ${PANEL_LEGACY} and daemon to ${DAEMON_LEGACY}"
     output "[15] Upgrade the standalone SFTP server to (1.0.5)."
-    output "[16] Make Pterodactyl compatible with the mobile app (only use this after you have installed the panel - check out https://pterodactyl.cloud for more information)."
-    output "[17] Update mobile compatibility."
-    output "[18] Install or update to phpMyAdmin (${PHPMYADMIN}) (only use this after you have installed the panel)."
-    output "[19] Install a standalone database host (only for use on daemon-only installations)."
-    output "[20] Change Pterodactyl theme (${PANEL_LEGACY} Only)."
+    output "[18] Install or update to phpMyAdmin (${PHPMYADMIN})"
+    output "[19] Install a standalone database host"
     output "[21] Emergency MariaDB root password reset."
     output "[22] Emergency database host information reset."
     read choice
@@ -190,66 +177,39 @@ install_options(){
             output "You have selected ${PANEL} panel installation only."
             ;;
         2 ) installoption=2
-            output "You have selected ${PANEL_LEGACY} panel installation only."
-            ;;
-        3 ) installoption=3
             output "You have selected wings ${WINGS} installation only."
             ;;
-        4 ) installoption=4
-            output "You have selected daemon ${DAEMON_LEGACY} installation only."
-            ;;
-        5 ) installoption=5
+        3 ) installoption=3
             output "You have selected ${PANEL} panel and wings ${WINGS} installation."
             ;;
-        6 ) installoption=6
-            output "You have selected ${PANEL_LEGACY} panel and daemon installation."
-            ;;
-        7 ) installoption=7
+        4 ) installoption=4
             output "You have selected to install the standalone SFTP server."
             ;;
-        8 ) installoption=8
+        5 ) installoption=5
             output "You have selected to upgrade the panel to ${PANEL}."
             ;;
-        9 ) installoption=9
+        6 ) installoption=6
             output "You have selected to upgrade the panel to ${PANEL}."
             ;;
-        10 ) installoption=10
-            output "You have selected to upgrade the panel to ${PANEL_LEGACY}."
-            ;;
-        11 ) installoption=11
-            output "You have selected to upgrade the daemon to ${DAEMON_LEGACY}."
-            ;;
-        12 ) installoption=12
+        7 ) installoption=7
             output "You have selected to migrate daemon ${DAEMON_LEGACY} to wings ${WINGS}."
             ;;
-        13 ) installoption=13
+        8 ) installoption=8
             output "You have selected to upgrade both the panel to ${PANEL} and migrating to wings ${WINGS}."
             ;;
-        14 ) installoption=14
-            output "You have selected to upgrade both the panel to ${PANEL} and daemon to ${DAEMON_LEGACY}."
-            ;;
-        15 ) installoption=15
+        9 ) installoption=9
             output "You have selected to upgrade the standalone SFTP."
             ;;
-        16 ) installoption=16
-            output "You have activated mobile app compatibility."
-            ;;
-        17 ) installoption=17
-            output "You have selected to update the mobile app compatibility."
-            ;;
-        18 ) installoption=18
+        10 ) installoption=10
             output "You have selected to install or update phpMyAdmin ${PHPMYADMIN}."
             ;;
-        19 ) installoption=19
+        11 ) installoption=11
             output "You have selected to install a Database host."
             ;;
-        20 ) installoption=20
-            output "You have selected to change Pterodactyl ${PANEL_LEGACY} only."
-            ;;
-        21 ) installoption=21
+        12 ) installoption=12
             output "You have selected MariaDB root password reset."
             ;;
-        22 ) installoption=22
+        13 ) installoption=13
             output "You have selected Database Host information reset."
             ;;
         * ) output "You did not enter a valid selection."
@@ -274,62 +234,6 @@ webserver_options() {
     esac
 }
 
-theme_options() {
-    output "Would you like to install one of Fonix's themes?"
-    warn "AS OF NOW, FONIX HAS NOT UPDATED HIS THEME TO 0.7.19 TO FIX THE XSS EXPLOIT IN PTERODACTYL <=0.7.18 YET. DO NOT USE THESE IN PRODUCTION. I HIGHLY RECOMMEND THAT YOU SELECT [1]."
-    output "[1] No."
-    output "[2] Super Pink and Fluffy."
-    output "[3] Tango Twist."
-    output "[4] Blue Brick."
-    output "[5] Minecraft Madness."
-    output "[6] Lime Stitch."
-    output "[7] Red Ape."
-    output "[8] BlackEnd Space."
-    output "[9] Nothing But Graphite."
-    output ""
-    output "You can find out about Fonix's themes here: https://github.com/TheFonix/Pterodactyl-Themes"
-    read choice
-    case $choice in
-        1 ) themeoption=1
-            output "You have selected to install the vanilla Pterodactyl theme."
-            output ""
-            ;;
-        2 ) themeoption=2
-            output "You have selected to install Fonix's Super Pink and Fluffy theme."
-            output ""
-            ;;
-        3 ) themeoption=3
-            output "You have selected to install Fonix's Tango Twist theme."
-            output ""
-            ;;
-        4 ) themeoption=4
-            output "You have selected to install Fonix's Blue Brick theme."
-            output ""
-            ;;
-        5 ) themeoption=5
-            output "You have selected to install Fonix's Minecraft Madness theme."
-            output ""
-            ;;
-        6 ) themeoption=6
-            output "You have selected to install Fonix's Lime Stitch theme."
-            output ""
-            ;;
-        7 ) themeoption=7
-            output "You have selected to install Fonix's Red Ape theme."
-            output ""
-            ;;
-        8 ) themeoption=8
-            output "You have selected to install Fonix's BlackEnd Space theme."
-            output ""
-            ;;
-        9 ) themeoption=9
-            output "You have selected to install Fonix's Nothing But Graphite theme."
-            output ""
-            ;;
-        * ) output "You did not enter a valid selection."
-            theme_options
-    esac
-}
 
 required_infos() {
     output "Please enter the desired user email address:"
@@ -338,7 +242,7 @@ required_infos() {
 }
 
 dns_check(){
-    output "Please enter your FQDN (panel.domain.tld):"
+    output "Please enter your FQDN (e.g. subdomain.domain.com):"
     read FQDN
 
     output "Resolving DNS..."
@@ -347,40 +251,13 @@ dns_check(){
     if [ "${SERVER_IP}" != "${DOMAIN_RECORD}" ]; then
         output ""
         output "The entered domain does not resolve to the primary public IP of this server."
-        output "Please make an A record pointing to your server's IP. For example, if you make an A record called 'panel' pointing to your server's IP, your FQDN is panel.domain.tld"
         output "If you are using Cloudflare, please disable the orange cloud."
-        output "If you do not have a domain, you can get a free one at https://freenom.com"
         dns_check
     else
         output "Domain resolved correctly. Good to go..."
     fi
 }
 
-theme() {
-    output "Theme installation initialized..."
-    cd /var/www/pterodactyl
-    if [ "$themeoption" = "1" ]; then
-        output "Keeping Pterodactyl's vanilla theme."
-    elif [ "$themeoption" = "2" ]; then
-        curl https://raw.githubusercontent.com/TheFonix/Pterodactyl-Themes/master/MasterThemes/PinkAnFluffy/build.sh | sh
-    elif [ "$themeoption" = "3" ]; then
-        curl https://raw.githubusercontent.com/TheFonix/Pterodactyl-Themes/master/MasterThemes/TangoTwist/build.sh | sh
-    elif [ "$themeoption" = "4" ]; then
-        curl https://raw.githubusercontent.com/TheFonix/Pterodactyl-Themes/master/MasterThemes/BlueBrick/build.sh | sh
-    elif [ "$themeoption" = "5" ]; then
-        curl https://raw.githubusercontent.com/TheFonix/Pterodactyl-Themes/master/MasterThemes/MinecraftMadness/build.sh | sh
-    elif [ "$themeoption" = "6" ]; then
-        curl https://raw.githubusercontent.com/TheFonix/Pterodactyl-Themes/master/MasterThemes/LimeStitch/build.sh | sh
-    elif [ "$themeoption" = "7" ]; then
-        curl https://raw.githubusercontent.com/TheFonix/Pterodactyl-Themes/master/MasterThemes/RedApe/build.sh | sh
-    elif [ "$themeoption" = "8" ]; then
-        curl https://raw.githubusercontent.com/TheFonix/Pterodactyl-Themes/master/MasterThemes/BlackEndSpace/build.sh | sh
-    elif [ "$themeoption" = "9" ]; then
-        curl https://raw.githubusercontent.com/TheFonix/Pterodactyl-Themes/master/MasterThemes/NothingButGraphite/build.sh | sh
-    fi
-    php artisan view:clear
-    php artisan cache:clear
-}
 
 repositories_setup(){
     output "Configuring your repositories..."
@@ -1422,13 +1299,6 @@ setup_pterodactyl(){
 }
 
 
-setup_pterodactyl_0.7.19(){
-    install_dependencies_0.7.19
-    install_pterodactyl_0.7.19
-    ssl_certs
-    webserver_config
-    theme
-}
 
 install_wings() {
     cd /root
@@ -1474,82 +1344,7 @@ EOF
     output "Wings ${WINGS} has now been installed on your system."
 }
 
-install_daemon() {
-    cd /root
-    output "Installing Pterodactyl Daemon dependencies..."
-    if  [ "$lsb_dist" =  "ubuntu" ] ||  [ "$lsb_dist" =  "debian" ]; then
-        apt-get -y install curl tar unzip
-    elif  [ "$lsb_dist" =  "fedora" ] ||  [ "$lsb_dist" =  "centos" ] || [ "$lsb_dist" =  "rhel" ]; then
-        yum -y install curl tar unzip
-    fi
 
-    output "Installing Docker"
-    curl -sSL https://get.docker.com/ | CHANNEL=stable bash
-
-    service docker start
-    systemctl enable docker
-    output "Enabling SWAP support for Docker & installing NodeJS..."
-    sed -i 's/GRUB_CMDLINE_LINUX_DEFAULT="[^"]*/& swapaccount=1/' /etc/default/grub
-    if  [ "$lsb_dist" =  "ubuntu" ] ||  [ "$lsb_dist" =  "debian" ]; then
-        update-grub
-        curl -sL https://deb.nodesource.com/setup_12.x | sudo bash -
-            if [ "$lsb_dist" =  "ubuntu" ] && [ "$dist_version" = "20.04" ]; then
-                apt -y install nodejs make gcc g++
-                npm install node-gyp
-            elif [ "$lsb_dist" =  "debian" ] && [ "$dist_version" = "10" ]; then
-                apt -y install nodejs make gcc g++
-            else
-                apt -y install nodejs make gcc g++ node-gyp
-            fi
-        apt-get -y update
-        apt-get -y upgrade
-        apt-get -y autoremove
-        apt-get -y autoclean
-    elif  [ "$lsb_dist" =  "fedora" ] ||  [ "$lsb_dist" =  "centos" ]; then
-        grub2-mkconfig -o "$(readlink /etc/grub2.conf)"
-        if [ "$lsb_dist" =  "fedora" ]; then
-            dnf -y module install nodejs:12/minimal
-	          dnf install -y tar unzip make gcc gcc-c++ python2
-	      fi
-	  elif [ "$lsb_dist" =  "centos" ] && [ "$dist_version" = "8" ]; then
-	      dnf -y module install nodejs:12/minimal
-	      dnf install -y tar unzip make gcc gcc-c++ python2
-        yum -y upgrade
-        yum -y autoremove
-        yum -y clean packages
-    fi
-    output "Installing the Pterodactyl daemon..."
-    mkdir -p /srv/daemon /srv/daemon-data
-    cd /srv/daemon
-    curl -L https://github.com/pterodactyl/daemon/releases/download/${DAEMON_LEGACY}/daemon.tar.gz | tar --strip-components=1 -xzv
-    npm install --only=production --no-audit --unsafe-perm
-    bash -c 'cat > /etc/systemd/system/wings.service' <<-'EOF'
-[Unit]
-Description=Pterodactyl Wings Daemon
-After=docker.service
-[Service]
-User=root
-#Group=some_group
-WorkingDirectory=/srv/daemon
-LimitNOFILE=4096
-PIDFile=/var/run/wings/daemon.pid
-ExecStart=/usr/bin/node /srv/daemon/src/index.js
-Restart=on-failure
-StartLimitInterval=600
-[Install]
-WantedBy=multi-user.target
-EOF
-
-    systemctl daemon-reload
-    systemctl enable wings
-
-    output "Daemon installation is nearly complete, please go to the panel and get your 'Auto Deploy' command in the node configuration tab."
-    output "Paste your auto deploy command below: "
-    read AUTODEPLOY
-    ${AUTODEPLOY}
-    service wings start
-    output "Daemon ${DAEMON_LEGACY} has now been installed on your system."
-}
 
 migrate_wings(){
     mkdir -p /etc/pterodactyl
@@ -1581,16 +1376,6 @@ EOF
     output "Your daemon has been migrated to wings."
 }
 
-upgrade_daemon(){
-    cd /srv/daemon
-    service wings stop
-    curl -L https://github.com/pterodactyl/daemon/releases/download/${DAEMON_LEGACY}/daemon.tar.gz | tar --strip-components=1 -xzv
-    npm install -g npm
-    npm install --only=production --no-audit --unsafe-perm
-    service wings restart
-    output "Your daemon has been updated to version ${DAEMON_LEGACY}."
-    output "npm has been updated to the latest version."
-}
 
 install_standalone_sftp(){
     os_check
@@ -1644,19 +1429,6 @@ upgrade_standalone_sftp(){
     chmod +x sftp-server
     service pterosftp start
     output "Your standalone SFTP server has successfully been updated to v1.0.5."
-}
-
-install_mobile(){
-    cd /var/www/pterodactyl
-    composer config repositories.cloud composer https://packages.pterodactyl.cloud
-    composer require pterodactyl/mobile-addon --update-no-dev --optimize-autoloader
-    php artisan migrate --force
-}
-
-upgrade_mobile(){
-    cd /var/www/pterodactyl
-    composer update pterodactyl/mobile-addon
-    php artisan migrate --force
 }
 
 install_phpmyadmin(){
@@ -1913,7 +1685,6 @@ EOF
 
 block_icmp(){
     output "Block ICMP (Ping) Packets?"
-    output "You should choose [1] if you are not using a monitoring system and [2] otherwise."
     output "[1] Yes."
     output "[2] No."
     read icmp
@@ -1929,7 +1700,7 @@ block_icmp(){
 }
 
 javapipe_kernel(){
-    output "Apply JavaPipe's kernel configurations (https://javapipe.com/blog/iptables-ddos-protection)?"
+    output "Apply JavaPipe's kernel configurations?"
     output "[1] Yes."
     output "[2] No."
     read javapipe
