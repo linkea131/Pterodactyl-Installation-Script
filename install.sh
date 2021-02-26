@@ -15,7 +15,7 @@ DAEMON_LEGACY=v0.6.13
 PHPMYADMIN=5.0.4
 
 preflight(){
-    output "Pterodactyl Installation & Upgrade Script"
+    output "Script"
     output ""
     output "Automatic operating system detection initialized..."
 
@@ -171,6 +171,13 @@ install_options(){
     output "[19] Install a standalone database host"
     output "[21] Emergency MariaDB root password reset."
     output "[22] Emergency database host information reset."
+    output " "
+    output "NEW UPCOMING SCRIPTS"
+    output " "
+    output "[23] Install OpenVPN"
+    output "[24] Install Standalone Minecraft Server"
+    output "[25] Install Ubuntu 18.04 RAM Limited Server [NEW SERVER ONLY]"
+    
     read choice
     case $choice in
         1 ) installoption=1
@@ -1831,15 +1838,7 @@ case $installoption in
              broadcast
 	     broadcast_database
              ;;
-        2)   webserver_options
-             theme_options
-             repositories_setup_0.7.19
-             required_infos
-             firewall
-             setup_pterodactyl_0.7.19
-             broadcast
-             ;;
-        3)   repositories_setup
+        2)   repositories_setup
              required_infos
              firewall
              ssl_certs
@@ -1847,14 +1846,7 @@ case $installoption in
              broadcast
 	     broadcast_database
              ;;
-        4)   repositories_setup_0.7.19
-             required_infos
-             firewall
-             ssl_certs
-             install_daemon
-             broadcast
-             ;;
-        5)   webserver_options
+        3)   webserver_options
              repositories_setup
              required_infos
              firewall
@@ -1863,56 +1855,26 @@ case $installoption in
              install_wings
              broadcast
              ;;
-        6)   webserver_options
-             theme_options
-             repositories_setup_0.7.19
-             required_infos
-             firewall
-             setup_pterodactyl_0.7.19
-             install_daemon
-             broadcast
+        4)   install_standalone_sftp
              ;;
-        7)   install_standalone_sftp
+        5)   upgrade_pterodactyl
              ;;
-        8)   upgrade_pterodactyl
+        6)   upgrade_pterodactyl_1.0
              ;;
-        9)   upgrade_pterodactyl_1.0
+        7)  migrate_wings
              ;;
-        10)  theme_options
-             upgrade_pterodactyl_0.7.19
-             theme
-             ;;
-        11)  upgrade_daemon
-             ;;
-        12)  migrate_wings
-             ;;
-        13)  upgrade_pterodactyl_1.0
+        8)  upgrade_pterodactyl_1.0
              migrate_wings
              ;;
-        14)  theme_options
-             upgrade_pterodactyl_0.7.19
-             theme
-             upgrade_daemon
+        9)  upgrade_standalone_sftp
              ;;
-        15)  upgrade_standalone_sftp
+        10)  install_phpmyadmin
              ;;
-        16)  install_mobile
-             ;;
-        17)  upgrade_mobile
-             ;;
-        18)  install_phpmyadmin
-             ;;
-        19)  repositories_setup
+        11)  repositories_setup
              install_database
              ;;
-        20)  theme_options
-             if [ "$themeoption" = "1" ]; then
-             	upgrade_pterodactyl_0.7.19
-             fi
-             theme
+        12) curl -sSL https://raw.githubusercontent.com/tommytran732/MariaDB-Root-Password-Reset/master/mariadb-104.sh | sudo bash
             ;;
-        21) curl -sSL https://raw.githubusercontent.com/tommytran732/MariaDB-Root-Password-Reset/master/mariadb-104.sh | sudo bash
-            ;;
-        22) database_host_reset
+        13) database_host_reset
             ;;
 esac
