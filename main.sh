@@ -631,97 +631,6 @@ server {
     service nginx restart
 }
 
-nginx_config_0.7.19() {
-    output "Disabling default configuration..."
-    rm -rf /etc/nginx/sites-enabled/default
-    output "Configuring Nginx Webserver..."
-
-echo '
-server_tokens off;
-set_real_ip_from 103.21.244.0/22;
-set_real_ip_from 103.22.200.0/22;
-set_real_ip_from 103.31.4.0/22;
-set_real_ip_from 104.16.0.0/12;
-set_real_ip_from 108.162.192.0/18;
-set_real_ip_from 131.0.72.0/22;
-set_real_ip_from 141.101.64.0/18;
-set_real_ip_from 162.158.0.0/15;
-set_real_ip_from 172.64.0.0/13;
-set_real_ip_from 173.245.48.0/20;
-set_real_ip_from 188.114.96.0/20;
-set_real_ip_from 190.93.240.0/20;
-set_real_ip_from 197.234.240.0/22;
-set_real_ip_from 198.41.128.0/17;
-set_real_ip_from 2400:cb00::/32;
-set_real_ip_from 2606:4700::/32;
-set_real_ip_from 2803:f800::/32;
-set_real_ip_from 2405:b500::/32;
-set_real_ip_from 2405:8100::/32;
-set_real_ip_from 2c0f:f248::/32;
-set_real_ip_from 2a06:98c0::/29;
-real_ip_header X-Forwarded-For;
-server {
-    listen 80 default_server;
-    server_name '"$FQDN"';
-    return 301 https://$server_name$request_uri;
-}
-server {
-    listen 443 ssl http2 default_server;
-    server_name '"$FQDN"';
-    root /var/www/pterodactyl/public;
-    index index.php;
-    access_log /var/log/nginx/pterodactyl.app-access.log;
-    error_log  /var/log/nginx/pterodactyl.app-error.log error;
-    # allow larger file uploads and longer script runtimes
-    client_max_body_size 100m;
-    client_body_timeout 120s;
-    sendfile off;
-    # SSL Configuration
-    ssl_certificate /etc/letsencrypt/live/'"$FQDN"'/fullchain.pem;
-    ssl_certificate_key /etc/letsencrypt/live/'"$FQDN"'/privkey.pem;
-    ssl_session_cache shared:SSL:10m;
-    ssl_protocols TLSv1.2;
-    ssl_ciphers 'ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES256-SHA384:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA256';
-    ssl_prefer_server_ciphers on;
-    # See https://hstspreload.org/ before uncommenting the line below.
-    # add_header Strict-Transport-Security "max-age=15768000; preload;";
-    add_header X-Content-Type-Options nosniff;
-    add_header X-XSS-Protection "1; mode=block";
-    add_header X-Robots-Tag none;
-    add_header Content-Security-Policy "frame-ancestors 'self'";
-    add_header X-Frame-Options DENY;
-    add_header Referrer-Policy same-origin;
-    location / {
-        try_files $uri $uri/ /index.php?$query_string;
-    }
-    location ~ \.php$ {
-        fastcgi_split_path_info ^(.+\.php)(/.+)$;
-        fastcgi_pass unix:/var/run/php/php7.3-fpm.sock;
-        fastcgi_index index.php;
-        include fastcgi_params;
-        fastcgi_param PHP_VALUE "upload_max_filesize = 100M \n post_max_size=100M";
-        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
-        fastcgi_param HTTP_PROXY "";
-        fastcgi_intercept_errors off;
-        fastcgi_buffer_size 16k;
-        fastcgi_buffers 4 16k;
-        fastcgi_connect_timeout 300;
-        fastcgi_send_timeout 300;
-        fastcgi_read_timeout 300;
-        include /etc/nginx/fastcgi_params;
-    }
-    location ~ /\.ht {
-        deny all;
-    }
-}
-' | sudo -E tee /etc/nginx/sites-available/pterodactyl.conf >/dev/null 2>&1
-    if [ "$lsb_dist" =  "debian" ] && [ "$dist_version" = "8" ]; then
-        sed -i 's/http2//g' /etc/nginx/sites-available/pterodactyl.conf
-    fi
-    ln -s /etc/nginx/sites-available/pterodactyl.conf /etc/nginx/sites-enabled/pterodactyl.conf
-    service nginx restart
-}
-
 apache_config() {
     output "Disabling default configuration..."
     rm -rf /etc/nginx/sites-enabled/default
@@ -946,15 +855,6 @@ setup_pterodactyl(){
     webserver_config
 }
 
-
-setup_pterodactyl_0.7.19(){
-    install_dependencies_0.7.19
-    install_pterodactyl_0.7.19
-    ssl_certs
-    webserver_config
-    theme
-}
-
 install_wings() {
     cd /root
     output "Installing Pterodactyl Wings dependencies..."
@@ -999,83 +899,6 @@ EOF
     output "Wings ${WINGS} has now been installed on your system."
 }
 
-install_daemon() {
-    cd /root
-    output "Installing Pterodactyl Daemon dependencies..."
-    if  [ "$lsb_dist" =  "ubuntu" ] ||  [ "$lsb_dist" =  "debian" ]; then
-        apt-get -y install curl tar unzip
-    elif  [ "$lsb_dist" =  "fedora" ] ||  [ "$lsb_dist" =  "centos" ] || [ "$lsb_dist" =  "rhel" ]; then
-        yum -y install curl tar unzip
-    fi
-
-    output "Installing Docker"
-    curl -sSL https://get.docker.com/ | CHANNEL=stable bash
-
-    service docker start
-    systemctl enable docker
-    output "Enabling SWAP support for Docker & installing NodeJS..."
-    sed -i 's/GRUB_CMDLINE_LINUX_DEFAULT="[^"]*/& swapaccount=1/' /etc/default/grub
-    if  [ "$lsb_dist" =  "ubuntu" ] ||  [ "$lsb_dist" =  "debian" ]; then
-        update-grub
-        curl -sL https://deb.nodesource.com/setup_12.x | sudo bash -
-            if [ "$lsb_dist" =  "ubuntu" ] && [ "$dist_version" = "20.04" ]; then
-                apt -y install nodejs make gcc g++
-                npm install node-gyp
-            elif [ "$lsb_dist" =  "debian" ] && [ "$dist_version" = "10" ]; then
-                apt -y install nodejs make gcc g++
-            else
-                apt -y install nodejs make gcc g++ node-gyp
-            fi
-        apt-get -y update
-        apt-get -y upgrade
-        apt-get -y autoremove
-        apt-get -y autoclean
-    elif  [ "$lsb_dist" =  "fedora" ] ||  [ "$lsb_dist" =  "centos" ]; then
-        grub2-mkconfig -o "$(readlink /etc/grub2.conf)"
-        if [ "$lsb_dist" =  "fedora" ]; then
-            dnf -y module install nodejs:12/minimal
-	          dnf install -y tar unzip make gcc gcc-c++ python2
-	      fi
-	  elif [ "$lsb_dist" =  "centos" ] && [ "$dist_version" = "8" ]; then
-	      dnf -y module install nodejs:12/minimal
-	      dnf install -y tar unzip make gcc gcc-c++ python2
-        yum -y upgrade
-        yum -y autoremove
-        yum -y clean packages
-    fi
-    output "Installing the Pterodactyl daemon..."
-    mkdir -p /srv/daemon /srv/daemon-data
-    cd /srv/daemon
-    curl -L https://github.com/pterodactyl/daemon/releases/download/${DAEMON_LEGACY}/daemon.tar.gz | tar --strip-components=1 -xzv
-    npm install --only=production --no-audit --unsafe-perm
-    bash -c 'cat > /etc/systemd/system/wings.service' <<-'EOF'
-[Unit]
-Description=Pterodactyl Wings Daemon
-After=docker.service
-[Service]
-User=root
-#Group=some_group
-WorkingDirectory=/srv/daemon
-LimitNOFILE=4096
-PIDFile=/var/run/wings/daemon.pid
-ExecStart=/usr/bin/node /srv/daemon/src/index.js
-Restart=on-failure
-StartLimitInterval=600
-[Install]
-WantedBy=multi-user.target
-EOF
-
-    systemctl daemon-reload
-    systemctl enable wings
-
-    output "Daemon installation is nearly complete, please go to the panel and get your 'Auto Deploy' command in the node configuration tab."
-    output "Paste your auto deploy command below: "
-    read AUTODEPLOY
-    ${AUTODEPLOY}
-    service wings start
-    output "Daemon ${DAEMON_LEGACY} has now been installed on your system."
-}
-
 migrate_wings(){
     mkdir -p /etc/pterodactyl
     curl -L -o /usr/local/bin/wings https://github.com/pterodactyl/wings/releases/download/${WINGS}/wings_linux_amd64
@@ -1104,17 +927,6 @@ EOF
     systemctl daemon-reload
     systemctl enable --now wings
     output "Your daemon has been migrated to wings."
-}
-
-upgrade_daemon(){
-    cd /srv/daemon
-    service wings stop
-    curl -L https://github.com/pterodactyl/daemon/releases/download/${DAEMON_LEGACY}/daemon.tar.gz | tar --strip-components=1 -xzv
-    npm install -g npm
-    npm install --only=production --no-audit --unsafe-perm
-    service wings restart
-    output "Your daemon has been updated to version ${DAEMON_LEGACY}."
-    output "npm has been updated to the latest version."
 }
 
 install_standalone_sftp(){
@@ -1160,28 +972,6 @@ WantedBy=multi-user.target
 EOF
     systemctl enable pterosftp
     service pterosftp restart
-}
-
-upgrade_standalone_sftp(){
-    output "Turning off the standalone SFTP server..."
-    service pterosftp stop
-    curl -Lo sftp-server https://github.com/pterodactyl/sftp-server/releases/download/v1.0.5/sftp-server
-    chmod +x sftp-server
-    service pterosftp start
-    output "Your standalone SFTP server has successfully been updated to v1.0.5."
-}
-
-install_mobile(){
-    cd /var/www/pterodactyl
-    composer config repositories.cloud composer https://packages.pterodactyl.cloud
-    composer require pterodactyl/mobile-addon --update-no-dev --optimize-autoloader
-    php artisan migrate --force
-}
-
-upgrade_mobile(){
-    cd /var/www/pterodactyl
-    composer update pterodactyl/mobile-addon
-    php artisan migrate --force
 }
 
 install_phpmyadmin(){
@@ -1545,32 +1335,25 @@ broadcast(){
     if [ "$installoption" = "1" ] || [ "$installoption" = "3" ]; then
         broadcast_database
     fi
-    output "###############################################################"
     output "FIREWALL INFORMATION"
-    output ""
     output "All unnecessary ports are blocked by default."
     if [ "$lsb_dist" =  "ubuntu" ] || [ "$lsb_dist" =  "debian" ]; then
         output "Use 'ufw allow <port>' to enable your desired ports."
     elif [ "$lsb_dist" =  "fedora" ] || [ "$lsb_dist" =  "centos" ] && [ "$dist_version" != "8" ]; then
         output "Use 'firewall-cmd --permanent --add-port=<port>/tcp' to enable your desired ports."
     fi
-    output "###############################################################"
     output ""
 }
 
 broadcast_database(){
-        output "###############################################################"
+        output
         output "MARIADB/MySQL INFORMATION"
-        output ""
         output "Your MariaDB/MySQL root password is $rootpassword"
-        output ""
         output "Create your MariaDB/MySQL host with the following information:"
         output "Host: $SERVER_IP"
         output "Port: 3306"
         output "User: admin"
         output "Password: $adminpassword"
-        output "###############################################################"
-        output ""
 }
 
 #Execution
