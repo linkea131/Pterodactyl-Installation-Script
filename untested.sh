@@ -1265,6 +1265,7 @@ EOF
             ufw allow 80
             ufw allow 8080
             ufw allow 2022
+            ufw allow 443
         elif [ "$installoption" = "4" ]; then
             ufw allow 80
             ufw allow 8080
