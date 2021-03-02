@@ -330,7 +330,7 @@ dns_check(){
         output ""
         output "Failed to register to domain"
         output "The entered domain does not resolve to the primary public IP of this server."
-        output "Please make an A record pointing to your server's IP. For example, if you make an A record called 'panel' pointing to your server's IP, your FQDN is panel.domain.tld"
+        output "Please make an A record pointing to your server's IP."
         output "If you are using Cloudflare, please disable the orange cloud."
         dns_check
     else
