@@ -274,23 +274,32 @@ webserver_options_uninstall() {
 
 webserver_config_uninstall_nginx() {
     output "Uninstall Nginx..."
-    apt-get -y remove software-properties-common
+    apt-get -y remove software-properties-common certbot dnsutils iptables fail2ban
     apt autoremove
     apt-get -y remove virt-what curl apt-transport-https ca-certificates gnupg
     apt autoremove
-    apt -y remove php7.4 php7.4-{cli,gd,mysql,pdo,mbstring,tokenizer,bcmath,xml,fpm,curl,zip} mariadb-server nginx tar unzip git redis-server
+    apt -y remove php7.4 php7.4-{cli,gd,mysql,pdo,mbstring,tokenizer,bcmath,xml,fpm,curl,zip} mariadb-server nginx tar unzip git redis-server git wget expect
     apt autoremove
-    rm -r /usr/local/bin/wings /usr/local/bin/composer
+    rm -r /usr/local/bin/wings 
+    rm -r /usr/local/bin/composer
     rm -r /var/www/pterodactyl
     rm -r /etc/systemd/system/wings.service
     rm -r /etc/systemd/system/pteroq.service
     rm -r /etc/systemd/system/redis.service
+    rm -r /etc/systemd/system/mariadb.service
+    rm -r /etc/systemd/system/mariadb.service.d
     rm -r /etc/nginx/sites-available/pterodactyl-conf
     rm -r /etc/nginx/sites-enabled/pterodactyl.conf
-    systemctl stop nginx
-    apt-get remove nginx
+    rm -r /etc/pterodactyl
+    rm -r /srv/daemon-data
+    rm -r /etc/fail2ban
     apt autoremove
-
+    ufw deny 80
+    ufw deny 443
+    ufw deny 8080
+    ufw deny 3306
+    ufw deny 2022
+    rm -r /etc/mysql
 }
 
 
