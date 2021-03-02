@@ -10,6 +10,10 @@ This command will only work with Linux OS, it will not work with Windows <br />
 
 ``curl -L https://raw.githubusercontent.com/ItsLeon15/Pterodactyl-Installation-Script/main/main.sh > main.sh | chmod +x main.sh; ./main.sh`` <br /> 
 
+or 
+
+``curl -L https://raw.githubusercontent.com/ItsLeon15/Pterodactyl-Installation-Script/main/untested.sh > untested.sh | chmod +x untested.sh; ./untested.sh`` <br />
+
 <br /> 
 
 
