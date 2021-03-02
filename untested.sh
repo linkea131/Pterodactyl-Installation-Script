@@ -549,56 +549,6 @@ install_pterodactyl() {
     else
         curl -sS https://getcomposer.org/installer | sudo php -- --install-dir=/usr/local/bin --filename=composer
     fi
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     cp .env.example .env
     /usr/local/bin/composer install --no-dev --optimize-autoloader --no-interaction
     php artisan key:generate --force
