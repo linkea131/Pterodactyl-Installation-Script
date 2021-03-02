@@ -549,6 +549,68 @@ install_pterodactyl() {
     else
         curl -sS https://getcomposer.org/installer | sudo php -- --install-dir=/usr/local/bin --filename=composer
     fi
+
+
+
+Install Option 1
+Option 2
+
+Nginx
+Apache
+
+
+
+if ${panel} != ${version}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     cp .env.example .env
     /usr/local/bin/composer install --no-dev --optimize-autoloader --no-interaction
     php artisan key:generate --force
@@ -1487,5 +1549,7 @@ case $installoption in
         12) database_host_reset
             ;;
         13) webserver_options_uninstall
+            ;;
+        14) webserver_options_uninstall
             ;;
 esac
