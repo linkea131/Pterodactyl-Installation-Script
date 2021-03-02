@@ -201,16 +201,16 @@ install_options(){
         10 ) installoption=10
             output "You have selected to install or update phpMyAdmin ${PHPMYADMIN}."
             ;;
-        12 ) installoption=11
+        11 ) installoption=11
             output "You have selected MariaDB root password reset."
             ;;
-        13 ) installoption=12
+        12 ) installoption=12
             output "You have selected Database Host information reset."
             ;;
-        14 ) installoption=13
+        13 ) installoption=13
             output "You have selected to Install / Uninstall OpenVPN"
             ;;
-        15 ) installoption=14
+        14 ) installoption=14
             output "You have selected to uninstall Pterodactyl"
             ;;
         * ) output "You did not enter a valid selection."
@@ -549,18 +549,6 @@ install_pterodactyl() {
     else
         curl -sS https://getcomposer.org/installer | sudo php -- --install-dir=/usr/local/bin --filename=composer
     fi
-
-
-
-Install Option 1
-Option 2
-
-Nginx
-Apache
-
-
-
-if ${panel} != ${version}
 
 
 
@@ -1548,7 +1536,7 @@ case $installoption in
             ;;
         12) database_host_reset
             ;;
-        13) webserver_options_uninstall
+        13) unknown
             ;;
         14) webserver_options_uninstall
             ;;
