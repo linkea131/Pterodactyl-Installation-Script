@@ -207,6 +207,12 @@ install_options(){
         13 ) installoption=12
             output "You have selected Database Host information reset."
             ;;
+        14 ) installoption=13
+            output "You have selected to Install / Uninstall OpenVPN"
+            ;;
+        15 ) installoption=14
+            output "You have selected to uninstall Pterodactyl"
+            ;;
         * ) output "You did not enter a valid selection."
             install_options
     esac
@@ -280,7 +286,7 @@ webserver_config_uninstall_nginx() {
     rm -r /etc/nginx/sites-enabled/pterodactyl.conf
     systemctl stop nginx
     apt-get remove nginx
-    
+
 }
 
 
@@ -1477,11 +1483,5 @@ case $installoption in
         12) database_host_reset
             ;;
         13) webserver_options_uninstall
-            repositories_setup
-            required_infos
-            firewall
-            setup_pterodactyl
-            broadcast
-	    broadcast_database
             ;;
 esac
