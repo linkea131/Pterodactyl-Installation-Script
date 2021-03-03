@@ -101,8 +101,12 @@ preflight(){
         warn "Resuming in 10 seconds..."
         sleep 10
     else
+        wait 5
+        clear
         output "Did not detect any bad kernel. Moving forward..."
         output ""
+        wait 5
+        clear
     fi
 }
 
