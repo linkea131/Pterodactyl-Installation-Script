@@ -166,9 +166,12 @@ install_options(){
     output "[8] Upgrade the panel to ${PANEL} and Migrate to wings"
     output "[9] Upgrade the standalone SFTP server to (1.0.5)."
     output "[10] Install or update to phpMyAdmin (${PHPMYADMIN}) (only use this after you have installed the panel)."
-    output "[11] Install a standalone database host (only for use on daemon-only installations)."
-    output "[12] Emergency MariaDB root password reset."
-    output "[13] Emergency database host information reset."
+    output "[11] Emergency MariaDB root password reset."
+    output "[12] Emergency database host information reset."
+
+    output "[13] Install / Uninstall OpenVPN"
+    output "[14] Uninstall Pterodactyl"
+
     read choice
     case $choice in
         1 ) installoption=1
@@ -199,13 +202,16 @@ install_options(){
             output "You have selected to install or update phpMyAdmin ${PHPMYADMIN}."
             ;;
         11 ) installoption=11
-            output "You have selected to install a Database host."
-            ;;
-        12 ) installoption=12
             output "You have selected MariaDB root password reset."
             ;;
-        13 ) installoption=13
+        12 ) installoption=12
             output "You have selected Database Host information reset."
+            ;;
+        13 ) installoption=13
+            output "You have selected to Install / Uninstall OpenVPN"
+            ;;
+        14 ) installoption=14
+            output "You have selected to uninstall Pterodactyl"
             ;;
         * ) output "You did not enter a valid selection."
             install_options
@@ -229,6 +235,162 @@ webserver_options() {
     esac
 }
 
+
+
+
+
+
+webserver_options_uninstall_ptero() {
+    output "What OS are you running?: \n[1] Ubuntu 18.04, 20.04 \n[2] CentOS \n[3] Other OS (May Cause Issues)"
+    read choice
+    case $choice in
+        1 ) webserver_options_ubuntu
+            output "You have selected to uninstall Ubuntu Pterodactyl Panel."
+            output ""
+            ;;
+        2 ) webserver_options_centos
+            output "You have selected to uninstall CentOS Pterodactyl Panel."
+            output ""
+            ;;
+        3 ) webserver_options_other
+            output "You have selected to uninstall Pterodactyl Panel on a different OS that hasn't been provided."
+            output ""
+            ;;
+        * ) output "You did not enter a valid selection."
+            webserver_options_uninstall_ptero
+    esac
+}
+
+
+
+
+
+
+
+webserver_options_ubuntu() {
+    output "Ubuntu : Which Webserver do you want to remove?:\n[1] Nginx. \n[2] Apache2."
+    read choice
+    case $choice in
+        1 ) webserver_options_ubuntu_nginx
+            output "Ubuntu : You have selected to uninstall Nginx."
+            output ""
+            ;;
+        2 ) webserver_options_ubuntu_apache
+            output "Ubuntu : You have selected to uninstall Apache2/httpd."
+            output ""
+            ;;
+        * ) output "Ubuntu : You did not enter a valid selection to uninstall."
+            webserver_options_ubuntu
+    esac
+}
+
+webserver_options_centos() {
+    output "Cent OS : Which Webserver do you want to remove?:\n[1] Nginx. \n[2] Apache2."
+    read choice
+    case $choice in
+        1 ) 
+            output "Cent OS : You have selected to uninstall Nginx."
+            output ""
+            ;;
+        2 ) 
+            output "Cent OS : You have selected to uninstall Apache2/httpd."
+            output ""
+            ;;
+        * ) output "Cent OS : You did not enter a valid selection to uninstall."
+            webserver_options_centos
+    esac
+}
+
+webserver_options_other() {
+    output "Other OS : Which Webserver do you want to remove?:\n[1] Nginx. \n[2] Apache2."
+    read choice
+    case $choice in
+        1 ) 
+            output "Other OS : You have selected to uninstall Nginx."
+            output ""
+            ;;
+        2 ) 
+            output "Other OS : You have selected to uninstall Apache2/httpd."
+            output ""
+            ;;
+        * ) output "Other OS : You did not enter a valid selection to uninstall."
+            webserver_options_other
+    esac
+}
+
+
+
+
+webserver_options_ubuntu_apache () {
+    output "Uninstalling Apache2 on Ubuntu 18.04, 20.04"
+    apt-get -y remove software-properties-common curl virt-what tar unzip certbot
+    service apache2 stop
+    rm -r /etc/apache2/sites-available/pterodactyl.conf # Apache Conf
+    rm -r /etc/apache2/sites-enabled/pterodactyl.conf # Apache Conf
+    rm -r /etc/systemd/system/apache2.conf
+    rm -r /var/www/pterodactyl # Pterodactyl Panel Dir
+    service wings stop
+    rm -r /var/run/wings/daemon.pid # Daemon Service?
+    rm -r /etc/systemd/system/wings.service # Wings
+    rm -r /usr/local/bin/wings # Wings
+    rm -r /etc/pterodactyl # Wings
+    rm -r /etc/php-fpm.d/www-pterodactyl.conf
+    rm -r /var/run/php-fpm.d/www-pterodactyl.conf
+    service stop php-fpm
+    rm -r /usr/local/bin/php-fpm # php-fpm
+    rm -r /srv/daemon-data # Daemon Data
+    rm -r 
+}
+
+
+
+webserver_options_ubuntu_nginx () {
+    output "Uninstall Nginx on Ubuntu 18.04, 20.04"
+    apt-get -y remove software-properties-common certbot dnsutils iptables fail2ban
+    apt autoremove
+    apt-get -y remove virt-what curl apt-transport-https ca-certificates gnupg
+    apt autoremove
+    apt -y remove php7.4 php7.4-{cli,gd,mysql,pdo,mbstring,tokenizer,bcmath,xml,fpm,curl,zip} mariadb-server nginx tar unzip git redis-server git wget expect
+    apt autoremove
+    rm -r /usr/local/bin/wings 
+    rm -r /usr/local/bin/composer
+    rm -r /var/www/pterodactyl
+    rm -r /etc/nginx/sites-enabled/default 
+    rm -r /etc/systemd/system/wings.service
+    rm -r /etc/systemd/system/pteroq.service
+    rm -r /etc/systemd/system/redis.service
+    rm -r /etc/systemd/system/mariadb.service
+    rm -r /etc/systemd/system/mariadb.service.d
+    rm -r /etc/nginx/sites-available/pterodactyl-conf
+    rm -r /etc/nginx/sites-enabled/pterodactyl.conf
+    rm -r /etc/pterodactyl
+    rm -r /srv/daemon-data
+    rm -r /etc/fail2ban
+    rm -r /etc/mysql
+    apt autoremove
+    output "All done... Any issues with [apt / sudo / any other dependencies] please re-run the command and enter [Option 15]"
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 required_infos() {
     output "Please enter the desired user email address:"
     read email
@@ -246,7 +408,7 @@ dns_check(){
         output ""
         output "Failed to register to domain"
         output "The entered domain does not resolve to the primary public IP of this server."
-        output "Please make an A record pointing to your server's IP. For example, if you make an A record called 'panel' pointing to your server's IP, your FQDN is panel.domain.tld"
+        output "Please make an A record pointing to your server's IP."
         output "If you are using Cloudflare, please disable the orange cloud."
         dns_check
     else
@@ -1172,6 +1334,7 @@ EOF
             ufw allow 80
             ufw allow 8080
             ufw allow 2022
+            ufw allow 443
         elif [ "$installoption" = "4" ]; then
             ufw allow 80
             ufw allow 8080
@@ -1188,6 +1351,12 @@ EOF
             ufw allow 8080
             ufw allow 2022
             ufw allow 3306
+        elif [ "$installoption" = "13" ]; then
+            ufw deny 80
+            ufw deny 443
+            ufw deny 2022
+            ufw deny 3306
+            ufw deny 8080
         fi
         yes |ufw enable 
     elif [ "$lsb_dist" =  "centos" ] || [ "$lsb_dist" =  "fedora" ] || [ "$lsb_dist" =  "rhel" ]; then
@@ -1303,7 +1472,7 @@ install_database() {
 		output 'Restarting MySQL process...'
 		service mysql restart
 	else 
-		output 'File my.cnf was not found! Please contact support.'
+		output 'File my.cnf was not found!'
 	fi
 
     if [ "$lsb_dist" =  "ubuntu" ] || [ "$lsb_dist" =  "debian" ]; then
@@ -1398,11 +1567,13 @@ case $installoption in
              ;;
         10)  install_phpmyadmin
              ;;
-        11)  repositories_setup
-             install_database
-             ;;
-        12) curl -sSL https://raw.githubusercontent.com/tommytran732/MariaDB-Root-Password-Reset/master/mariadb-104.sh | sudo bash
+        11) curl -sSL https://raw.githubusercontent.com/tommytran732/MariaDB-Root-Password-Reset/master/mariadb-104.sh | sudo bash
             ;;
-        13) database_host_reset
+        12) database_host_reset
+            ;;
+        13) unknown
+            ;;
+        14) webserver_options_uninstall_ptero
+            firewall
             ;;
 esac
