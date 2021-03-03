@@ -264,11 +264,13 @@ webserver_options_uninstall_ptero() {
 
 
 
-
+webserver_options_exit() {
+    exit 5
+}
 
 
 webserver_options_ubuntu() {
-    output "Ubuntu : Which Webserver do you want to remove?:\n[1] Nginx. \n[2] Apache2."
+    output "Ubuntu : Which Webserver do you want to remove?:\n[1] Nginx. \n[2] Apache2. \n[3] Exit."
     read choice
     case $choice in
         1 ) webserver_options_ubuntu_nginx
@@ -279,7 +281,7 @@ webserver_options_ubuntu() {
             output "Ubuntu : You have selected to uninstall Apache2/httpd."
             output ""
             ;;
-        3 ) exit 5
+        3 ) webserver_options_exit
             ;;
         * ) output "Ubuntu : You did not enter a valid selection to uninstall."
             webserver_options_ubuntu
