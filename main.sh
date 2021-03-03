@@ -157,20 +157,25 @@ os_check(){
 
 install_options(){
     output "Please select your installation option:"
+    output ""
     output "[1] Install the panel ${PANEL}."
     output "[2] Install the wings ${WINGS}."
     output "[3] Install the panel ${PANEL} and wings ${WINGS}."
+    output ""
     output "[4] Install the standalone SFTP server."
     output "[5] Upgrade (1.x) panel to ${PANEL}."
     output "[7] Migrating daemon to wings."
     output "[8] Upgrade the panel to ${PANEL} and Migrate to wings"
     output "[9] Upgrade the standalone SFTP server to (1.0.5)."
     output "[10] Install or update to phpMyAdmin (${PHPMYADMIN}) (only use this after you have installed the panel)."
+    output ""
     output "[11] Emergency MariaDB root password reset."
     output "[12] Emergency database host information reset."
-
-    output "[13] Install / Uninstall OpenVPN"
+    output ""
+    output "[13] Install / Uninstall OpenVPN (NOT FUNCTIONAL)"
     output "[14] Uninstall Pterodactyl"
+    output ""
+    output "[15] Exit Script"
 
     read choice
     case $choice in
@@ -213,13 +218,16 @@ install_options(){
         14 ) installoption=14
             output "You have selected to uninstall Pterodactyl"
             ;;
+        15 ) installoption=15
+            output "You have selected to exit the script"
+            ;;
         * ) output "You did not enter a valid selection."
             install_options
     esac
 }
 
 webserver_options() {
-    output "Please select which web server you would like to use:\n[1] Nginx (recommended).\n[2] Apache2/httpd."
+    output "Please select which web server you would like to use:\n[1] Nginx (recommended).\n[2] Apache2/httpd.\n[3] Exit."
     read choice
     case $choice in
         1 ) webserver=1
@@ -229,6 +237,8 @@ webserver_options() {
         2 ) webserver=2
             output "You have selected Apache2/httpd."
             output ""
+            ;;
+        3 ) webserver_options_exit
             ;;
         * ) output "You did not enter a valid selection."
             webserver_options
@@ -241,7 +251,7 @@ webserver_options() {
 
 
 webserver_options_uninstall_ptero() {
-    output "What OS are you running?: \n[1] Ubuntu 18.04, 20.04 \n[2] CentOS \n[3] Other OS (May Cause Issues)"
+    output "What OS are you running?: \n[1] Ubuntu 18.04, 20.04 \n[2] CentOS \n[3] Other OS (May Cause Issues) \n[4] Exit."
     read choice
     case $choice in
         1 ) webserver_options_ubuntu
@@ -256,6 +266,8 @@ webserver_options_uninstall_ptero() {
             output "You have selected to uninstall Pterodactyl Panel on a different OS that hasn't been provided."
             output ""
             ;;
+        4 ) webserver_options_exit
+            ;;
         * ) output "You did not enter a valid selection."
             webserver_options_uninstall_ptero
     esac
@@ -264,11 +276,15 @@ webserver_options_uninstall_ptero() {
 
 
 
-webserver_options_exit() {
-    wait 5
-        exit
-}
 
+
+
+
+
+
+webserver_options_exit() {
+    exit
+}
 
 webserver_options_ubuntu() {
     output "Ubuntu : Which Webserver do you want to remove?:\n[1] Nginx. \n[2] Apache2. \n[3] Exit."
@@ -1575,9 +1591,11 @@ case $installoption in
             ;;
         12) database_host_reset
             ;;
-        13) unknown
+        13) webserver_options_exit
             ;;
         14) webserver_options_uninstall_ptero
             firewall
+            ;;
+        15) webserver_options_exit
             ;;
 esac
