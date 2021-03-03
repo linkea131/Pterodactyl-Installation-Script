@@ -101,12 +101,8 @@ preflight(){
         warn "Resuming in 10 seconds..."
         sleep 10
     else
-        wait 5
-        clear
         output "Did not detect any bad kernel. Moving forward..."
         output ""
-        wait 5
-        clear
     fi
 }
 
@@ -364,7 +360,10 @@ webserver_options_ubuntu_apache () {
     service stop php-fpm
     rm -r /usr/local/bin/php-fpm # php-fpm
     rm -r /srv/daemon-data # Daemon Data
-    
+    output "All done... Any issues with [apt / sudo / any other dependencies] please re-run the command and enter [Option 15]"
+    output ""
+    output "Exiting..."
+    webserver_options_exit
 }
 
 
@@ -391,7 +390,7 @@ webserver_options_ubuntu_nginx () {
     rm -r /etc/mysql
     output "All done... Any issues with [apt / sudo / any other dependencies] please re-run the command and enter [Option 15]"
     output ""
-    output "Exiting in 5 seconds..."
+    output "Exiting..."
     webserver_options_exit
 }
 
