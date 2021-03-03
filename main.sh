@@ -347,11 +347,8 @@ webserver_options_ubuntu_apache () {
 webserver_options_ubuntu_nginx () {
     output "Uninstall Nginx on Ubuntu 18.04, 20.04"
     apt-get -y remove software-properties-common certbot dnsutils iptables fail2ban
-    apt autoremove
     apt-get -y remove virt-what curl apt-transport-https ca-certificates gnupg
-    apt autoremove
     apt -y remove php7.4 php7.4-{cli,gd,mysql,pdo,mbstring,tokenizer,bcmath,xml,fpm,curl,zip} mariadb-server nginx tar unzip git redis-server git wget expect
-    apt autoremove
     rm -r /usr/local/bin/wings 
     rm -r /usr/local/bin/composer
     rm -r /var/www/pterodactyl
@@ -367,7 +364,6 @@ webserver_options_ubuntu_nginx () {
     rm -r /srv/daemon-data
     rm -r /etc/fail2ban
     rm -r /etc/mysql
-    apt autoremove
     output "All done... Any issues with [apt / sudo / any other dependencies] please re-run the command and enter [Option 15]"
 }
 
