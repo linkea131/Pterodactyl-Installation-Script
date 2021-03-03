@@ -265,7 +265,8 @@ webserver_options_uninstall_ptero() {
 
 
 webserver_options_exit() {
-    exit 5
+    wait 5
+        exit
 }
 
 
@@ -371,7 +372,6 @@ webserver_options_ubuntu_nginx () {
     output "All done... Any issues with [apt / sudo / any other dependencies] please re-run the command and enter [Option 15]"
     output ""
     output "Exiting in 5 seconds..."
-    wait 5
     webserver_options_exit
 }
 
