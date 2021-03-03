@@ -343,7 +343,7 @@ webserver_options_ubuntu_apache () {
     service stop php-fpm
     rm -r /usr/local/bin/php-fpm # php-fpm
     rm -r /srv/daemon-data # Daemon Data
-    rm -r 
+    
 }
 
 
@@ -369,7 +369,10 @@ webserver_options_ubuntu_nginx () {
     rm -r /etc/fail2ban
     rm -r /etc/mysql
     output "All done... Any issues with [apt / sudo / any other dependencies] please re-run the command and enter [Option 15]"
-    webserver_options_ubuntu
+    output ""
+    output "Exiting in 5 seconds..."
+    wait 5
+    webserver_options_exit
 }
 
 
