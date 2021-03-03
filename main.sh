@@ -279,6 +279,8 @@ webserver_options_ubuntu() {
             output "Ubuntu : You have selected to uninstall Apache2/httpd."
             output ""
             ;;
+        3 ) exit 5
+            ;;
         * ) output "Ubuntu : You did not enter a valid selection to uninstall."
             webserver_options_ubuntu
     esac
