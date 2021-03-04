@@ -398,6 +398,44 @@ webserver_options_ubuntu_nginx () {
 
 
 
+
+
+
+webserver_options_ubuntu_fqdn () {
+    output "Enter your FQDN to remove the SSL Cert"
+    read FQDN_UNINSTALL
+
+    output "Removing files..."
+    rm -r /etc/letsencrypt/live/${FQDN_UNINSTALL}
+    webserver_options_uninstall_exit
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 pl_ports_2022 () {
     output "[1] Deny 2022? \n[2] Allow 2022"
     read choice
@@ -498,7 +536,7 @@ pl_ports_deny_80 () {
 
 pl_ports_allow_8080 () {
     ufw allow 8080
-    webserver_options_uninstall_exit
+    webserver_options_ubuntu_fqdn
 }
 
 pl_ports_deny_8080 () {
@@ -507,7 +545,7 @@ pl_ports_deny_8080 () {
     output ""
     output "Exiting..."
     output ""
-    webserver_options_uninstall_exit
+    webserver_options_ubuntu_fqdn
 }
 
 
