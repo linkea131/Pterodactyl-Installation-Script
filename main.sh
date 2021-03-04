@@ -296,13 +296,13 @@ webserver_options_uninstall() {
     output "Ubuntu : Which webserver do you want to remove?:\n[1] Nginx. \n[2] Apache2. \n[3] Exit. \n(All options will remove wings, this will not remove any server data)"
     read choice
     case $choice in
-        1 ) webserver_options_ubuntu_nginx
-            output "Uninstall : You have selected to uninstall Nginx."
+        1 ) output "Uninstall : You have selected to uninstall Nginx."
             output ""
+            webserver_options_ubuntu_nginx
             ;;
-        2 ) webserver_options_uninstall_apache
-            output "Uninstall : You have selected to uninstall Apache2/httpd."
+        2 ) output "Uninstall : You have selected to uninstall Apache2/httpd."
             output ""
+            webserver_options_uninstall_apache
             ;;
         3 ) webserver_options_uninstall_exit
             ;;
@@ -339,14 +339,14 @@ webserver_options_uninstall_apache () {
 
 webserver_options_ubuntu_nginx () {
     output "Uninstall Nginx on all supported OS"
-    apt update
-    apt remove maradb-common maraidb-client
-    apt update
-    apt remove php7.4 php7.4-{cli,gd,mysql,pdo,mbstring,tokenizer,bcmath,xml,fpm,curl,zip}
-    apt remove nginx
-    apt remove redis-server
-    apt remove certbot
-    apt remove python3-certbot-nginx
+    apt update -y
+    apt remove -y maradb-common maraidb-client
+    apt update -y
+    apt remove -y php7.4 php7.4-{cli,gd,mysql,pdo,mbstring,tokenizer,bcmath,xml,fpm,curl,zip}
+    apt remove -y nginx
+    apt remove -y redis-server
+    apt remove -y certbot
+    apt remove -y python3-certbot-nginx
 
     rm -r /usr/local/bin/composer
     rm -r /etc/letsencrypt/live
@@ -360,25 +360,20 @@ webserver_options_ubuntu_nginx () {
 
     mkdir /etc/letsencrypt/live
 
-    systemctl stop redis-server
-    systemctl disable redis-server
-    systemctl stop php7.4-fpm
-    systemctl disable php7.4-fpm
-    systemctl stop nginx
-    systemctl disable nginx
-    systemctl stop pteroq.service
-    systemctl disable pteroq.service
+    systemctl stop --now redis-server
+    systemctl disable --now redis-server
+    systemctl stop --now php7.4-fpm
+    systemctl disable --now php7.4-fpm
+    systemctl stop --now nginx
+    systemctl disable --now nginx
+    systemctl stop --now pteroq.service
+    systemctl disable --now pteroq.service
     systemctl stop --now docker
     systemctl disable --now docker
     systemctl stop --now wings
     systemctl disable --now wings
 
     pl_ports_2022
-
-    output "All done... Any issues with [apt / sudo / any other dependencies] please re-run the command and enter [Option 20]"
-    output ""
-    output "Exiting..."
-    webserver_options_uninstall_exit
 }
 
 pl_ports_2022 () {
@@ -449,7 +444,6 @@ pl_ports_8080 () {
     esac
 }
 
-
 pl_ports_allow_2022 () {
     ufw allow 2022
     pl_ports_443
@@ -487,6 +481,10 @@ pl_ports_allow_8080 () {
 
 pl_ports_deny_8080 () {
     ufw deny 8080
+    output "All done... Any issues with [apt / sudo / any other dependencies] please re-run the command and enter [Option 20]"
+    output ""
+    output "Exiting..."
+    output ""
     webserver_options_uninstall_exit
 }
 
