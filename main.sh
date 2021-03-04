@@ -401,13 +401,7 @@ webserver_options_ubuntu_nginx () {
 
 
 
-webserver_options_ubuntu_fqdn () {
-    output "Enter your FQDN to remove the SSL Cert"
-    read FQDN_UNINSTALL
-    output "Removing files..."
-    rm -r /etc/letsencrypt/live/${FQDN_UNINSTALL}
-    webserver_options_uninstall_exit
-}
+
 
 
 
@@ -556,7 +550,13 @@ pl_ports_deny_8080 () {
 
 
 
-
+webserver_options_ubuntu_fqdn () {
+    output "Enter your FQDN to remove the SSL Cert"
+    read FQDN_UNINSTALL
+    output "Removing files..."
+    rm -r /etc/letsencrypt/live/${FQDN_UNINSTALL}
+    webserver_options_uninstall_exit
+}
 
 
 
