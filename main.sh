@@ -313,43 +313,49 @@ webserver_options_uninstall() {
 
 webserver_options_uninstall_apache () {
     output "Uninstalling Apache2 on all supported OS"
-    apt-get -y remove software-properties-common curl virt-what tar unzip certbot
-    service apache2 stop
-    rm -r /etc/apache2/sites-available/pterodactyl.conf # Apache Conf
-    rm -r /etc/apache2/sites-enabled/pterodactyl.conf # Apache Conf
-    rm -r /etc/systemd/system/apache2.conf
-    rm -r /var/www/pterodactyl # Pterodactyl Panel Dir
-    service wings stop
-    rm -r /var/run/wings/daemon.pid # Daemon Service?
-    rm -r /etc/systemd/system/wings.service # Wings
-    rm -r /usr/local/bin/wings # Wings
-    rm -r /etc/pterodactyl # Wings
-    rm -r /etc/php-fpm.d/www-pterodactyl.conf
-    rm -r /var/run/php-fpm.d/www-pterodactyl.conf
-    service stop php-fpm
-    rm -r /usr/local/bin/php-fpm # php-fpm
-    rm -r /srv/daemon-data # Daemon Data
-    output "All done... Any issues with [apt / sudo / any other dependencies] please re-run the command and enter [Option 20]"
-    output ""
-    output "Exiting..."
-    webserver_options_uninstall_exit
+
+    apt update -y
+    apt remove -y php7.4 php7.4-{cli,gd,mysql,pdo,mbstring,tokenizer,bcmath,xml,fpm,curl,zip}
+    apt remove -y redis-server
+    apt remove -y certbot
+    apt remove -y python3-certbot-apache
+
+    rm -r /usr/local/bin/composer
+    rm -r /var/www/pterodactyl
+    rm -r /etc/systemd/system/pteroq.service
+    rm -r /etc/apache2/sites-available/pterodactyl.conf
+    rm -r /etc/apache2/sites-enabled/pterodactyl.conf
+    rm -r /etc/pterodactyl
+    rm -r /usr/local/bin/wings
+    rm -r /etc/systemd/system/wings.service
+
+
+    systemctl stop --now redis-server
+    systemctl disable --now redis-server
+    systemctl stop --now pteroq.service
+    systemctl disable --now pteroq.service
+    systemctl restart --now apache2.service
+    systemctl stop --now docker.service
+    systemctl disable --now docker.service
+    systemctl stop --now wings.service
+    systemctl disable --now wings.service
+
+    pl_ports_2022
 }
 
 
 
 webserver_options_ubuntu_nginx () {
     output "Uninstall Nginx on all supported OS"
-    apt update -y
-    apt remove -y maradb-common maraidb-client
+
     apt update -y
     apt remove -y php7.4 php7.4-{cli,gd,mysql,pdo,mbstring,tokenizer,bcmath,xml,fpm,curl,zip}
-    apt remove -y nginx
     apt remove -y redis-server
     apt remove -y certbot
     apt remove -y python3-certbot-nginx
 
     rm -r /usr/local/bin/composer
-    rm -r /etc/letsencrypt/live
+    rm -r /etc/letsencrypt/live/${FQDN}
     rm -r /var/www/pterodactyl
     rm -r /etc/systemd/system/pteroq.service
     rm -r /etc/nginx/sites-available/pterodactyl.conf
@@ -358,16 +364,13 @@ webserver_options_ubuntu_nginx () {
     rm -r /usr/local/bin/wings
     rm -r /etc/systemd/system/wings.service
 
-    mkdir /etc/letsencrypt/live
-
     systemctl stop --now redis-server
     systemctl disable --now redis-server
-    systemctl stop --now php7.4-fpm
-    systemctl disable --now php7.4-fpm
-    systemctl stop --now nginx
-    systemctl disable --now nginx
+   #systemctl stop --now php7.4-fpm
+   #systemctl disable --now php7.4-fpm
     systemctl stop --now pteroq.service
     systemctl disable --now pteroq.service
+    systemctl restart --now nginx.service
     systemctl stop --now docker
     systemctl disable --now docker
     systemctl stop --now wings
@@ -375,6 +378,58 @@ webserver_options_ubuntu_nginx () {
 
     pl_ports_2022
 }
+
+
+
+
+webserver_options_ubuntu_fqdn () {
+    output "Enter your FQDN to remove the SSL Cert"
+    read FQDN_UNINSTALL
+
+    output "Removing files..."
+    if [ "$FQDN_UNINSTALL" != "$FQDN" ]; then
+        output "Are you sure? [Yes], [No]"
+            if output == "Yes"; then
+                rm -r /etc/letsencrypt/live/$FQDN_UNINSTALL
+            if output == "No"; then
+                webserver_options_ubuntu_fqdn
+    else
+        output "Continuing..."
+        rm -r /etc/letsencrypt/live/$FDQN
+        
+}
+
+
+
+dns_check(){
+    output "Please enter your FQDN (panel.domain.tld):"
+    read FQDN
+
+    output "Resolving DNS..."
+    SERVER_IP=$(dig +short myip.opendns.com @resolver1.opendns.com)
+    DOMAIN_RECORD=$(dig +short ${FQDN})
+    if [ "${SERVER_IP}" != "${DOMAIN_RECORD}" ]; then
+        output ""
+        output "Failed to register to domain"
+        output "The entered domain does not resolve to the primary public IP of this server."
+        output "Please make an A record pointing to your server's IP."
+        output "If you are using Cloudflare, please disable the orange cloud."
+        dns_check
+    else
+        output "Domain resolved correctly"
+        output "Continuing..."
+    fi
+}
+
+
+
+
+
+
+
+
+
+
 
 pl_ports_2022 () {
     output "[1] Deny 2022? \n[2] Allow 2022"
