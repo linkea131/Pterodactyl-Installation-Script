@@ -386,21 +386,7 @@ webserver_options_ubuntu_nginx () {
 
 
 
-webserver_options_ubuntu_fqdn () {
-    output "Enter your FQDN to remove the SSL Cert"
-    read FQDN_UNINSTALL
 
-    output "Removing files..."
-    if [ "${FQDN_UNINSTALL}" != "${FQDN}" ]; then
-        output "Are you sure? [Yes], [No]"
-            if output == "Yes" then
-                rm -r /etc/letsencrypt/live/$FQDN_UNINSTALL
-            if output == "No" then
-                webserver_options_ubuntu_fqdn
-    if [ "${FQDN_UNINSTALL}" != "${FQDN}" ]; then
-        output "Continuing..."
-        rm -r /etc/letsencrypt/live/$FDQN
-}
 
 
 
