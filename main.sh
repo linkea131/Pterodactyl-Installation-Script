@@ -317,7 +317,6 @@ webserver_options_uninstall_apache () {
     apt update -y
     apt remove -y php7.4 php7.4-{cli,gd,mysql,pdo,mbstring,tokenizer,bcmath,xml,fpm,curl,zip}
     apt remove -y redis-server
-    apt remove -y certbot
     apt remove -y python3-certbot-apache
 
     rm -r /usr/local/bin/composer
@@ -351,7 +350,6 @@ webserver_options_ubuntu_nginx () {
     apt update -y
     apt remove -y php7.4 php7.4-{cli,gd,mysql,pdo,mbstring,tokenizer,bcmath,xml,fpm,curl,zip}
     apt remove -y redis-server
-    apt remove -y certbot
     apt remove -y python3-certbot-nginx
 
     rm -r /usr/local/bin/composer
@@ -554,7 +552,7 @@ webserver_options_ubuntu_fqdn () {
     output "Enter your FQDN to remove the SSL Cert"
     read FQDN_UNINSTALL
     output "Removing files..."
-    rm -r /etc/letsencrypt/live/${FQDN_UNINSTALL}
+    rm -r /etc/letsencrypt/live/${FQDN_UNINSTALL}*
     webserver_options_uninstall_exit
 }
 
