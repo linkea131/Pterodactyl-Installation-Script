@@ -296,7 +296,7 @@ webserver_options_uninstall() {
     output "Ubuntu : Which webserver do you want to remove?:\n[1] Nginx. \n[2] Apache2. \n[3] Exit. \n(All options will remove wings, this will not remove any server data)"
     read choice
     case $choice in
-        1 ) webserver_uninstall_nginx
+        1 ) webserver_options_ubuntu_nginx
             output "Uninstall : You have selected to uninstall Nginx."
             output ""
             ;;
