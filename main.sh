@@ -382,6 +382,10 @@ webserver_options_ubuntu_nginx () {
 
 
 
+
+
+
+
 webserver_options_ubuntu_fqdn () {
     output "Enter your FQDN to remove the SSL Cert"
     read FQDN_UNINSTALL
@@ -396,28 +400,6 @@ webserver_options_ubuntu_fqdn () {
     if [ "${FQDN_UNINSTALL}" != "${FQDN}" ]; then
         output "Continuing..."
         rm -r /etc/letsencrypt/live/$FDQN
-}
-
-
-
-dns_check(){
-    output "Please enter your FQDN (panel.domain.tld):"
-    read FQDN
-
-    output "Resolving DNS..."
-    SERVER_IP=$(dig +short myip.opendns.com @resolver1.opendns.com)
-    DOMAIN_RECORD=$(dig +short ${FQDN})
-    if [ "${SERVER_IP}" != "${DOMAIN_RECORD}" ]; then
-        output ""
-        output "Failed to register to domain"
-        output "The entered domain does not resolve to the primary public IP of this server."
-        output "Please make an A record pointing to your server's IP."
-        output "If you are using Cloudflare, please disable the orange cloud."
-        dns_check
-    else
-        output "Domain resolved correctly"
-        output "Continuing..."
-    fi
 }
 
 
