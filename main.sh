@@ -1,4 +1,4 @@
-#!/bin/bash
+ #!/bin/bash
 
 output(){
     echo -e '\e[36m'$1'\e[0m';
@@ -250,28 +250,6 @@ webserver_options() {
 
 
 
-webserver_options_uninstall_ptero() {
-    output "What OS are you running?: \n[1] Ubuntu 18.04, 20.04 \n[2] CentOS \n[3] Other OS (May Cause Issues) \n[4] Exit."
-    read choice
-    case $choice in
-        1 ) webserver_options_ubuntu
-            output "You have selected to uninstall Ubuntu Pterodactyl Panel."
-            output ""
-            ;;
-        2 ) webserver_options_centos
-            output "You have selected to uninstall CentOS Pterodactyl Panel."
-            output ""
-            ;;
-        3 ) webserver_options_other
-            output "You have selected to uninstall Pterodactyl Panel on a different OS that hasn't been provided."
-            output ""
-            ;;
-        4 ) webserver_options_exit
-            ;;
-        * ) output "You did not enter a valid selection."
-            webserver_options_uninstall_ptero
-    esac
-}
 
 
 
@@ -282,68 +260,59 @@ webserver_options_uninstall_ptero() {
 
 
 
-webserver_options_exit() {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+webserver_options_uninstall_exit() {
     exit
 }
 
-webserver_options_ubuntu() {
-    output "Ubuntu : Which Webserver do you want to remove?:\n[1] Nginx. \n[2] Apache2. \n[3] Exit."
+webserver_options_uninstall() {
+    output "Ubuntu : Which webserver do you want to remove?:\n[1] Nginx. \n[2] Apache2. \n[3] Exit. \n(All options will remove wings, this will not remove any server data)"
     read choice
     case $choice in
-        1 ) webserver_options_ubuntu_nginx
-            output "Ubuntu : You have selected to uninstall Nginx."
+        1 ) webserver_uninstall_nginx
+            output "Uninstall : You have selected to uninstall Nginx."
             output ""
             ;;
-        2 ) webserver_options_ubuntu_apache
-            output "Ubuntu : You have selected to uninstall Apache2/httpd."
+        2 ) webserver_options_uninstall_apache
+            output "Uninstall : You have selected to uninstall Apache2/httpd."
             output ""
             ;;
-        3 ) webserver_options_exit
+        3 ) webserver_options_uninstall_exit
             ;;
-        * ) output "Ubuntu : You did not enter a valid selection to uninstall."
-            webserver_options_ubuntu
+        * ) output "Uninstall : You did not enter a valid selection to uninstall."
+            webserver_options_uninstall
     esac
 }
 
-webserver_options_centos() {
-    output "Cent OS : Which Webserver do you want to remove?:\n[1] Nginx. \n[2] Apache2."
-    read choice
-    case $choice in
-        1 ) 
-            output "Cent OS : You have selected to uninstall Nginx."
-            output ""
-            ;;
-        2 ) 
-            output "Cent OS : You have selected to uninstall Apache2/httpd."
-            output ""
-            ;;
-        * ) output "Cent OS : You did not enter a valid selection to uninstall."
-            webserver_options_centos
-    esac
-}
-
-webserver_options_other() {
-    output "Other OS : Which Webserver do you want to remove?:\n[1] Nginx. \n[2] Apache2."
-    read choice
-    case $choice in
-        1 ) 
-            output "Other OS : You have selected to uninstall Nginx."
-            output ""
-            ;;
-        2 ) 
-            output "Other OS : You have selected to uninstall Apache2/httpd."
-            output ""
-            ;;
-        * ) output "Other OS : You did not enter a valid selection to uninstall."
-            webserver_options_other
-    esac
-}
-
-
-
-
-webserver_options_ubuntu_apache () {
-    output "Uninstalling Apache2 on Ubuntu 18.04, 20.04"
+webserver_options_uninstall_apache () {
+    output "Uninstalling Apache2 on all supported OS"
     apt-get -y remove software-properties-common curl virt-what tar unzip certbot
     service apache2 stop
     rm -r /etc/apache2/sites-available/pterodactyl.conf # Apache Conf
@@ -360,39 +329,185 @@ webserver_options_ubuntu_apache () {
     service stop php-fpm
     rm -r /usr/local/bin/php-fpm # php-fpm
     rm -r /srv/daemon-data # Daemon Data
-    output "All done... Any issues with [apt / sudo / any other dependencies] please re-run the command and enter [Option 15]"
+    output "All done... Any issues with [apt / sudo / any other dependencies] please re-run the command and enter [Option 20]"
     output ""
     output "Exiting..."
-    webserver_options_exit
+    webserver_options_uninstall_exit
 }
 
 
 
 webserver_options_ubuntu_nginx () {
-    output "Uninstall Nginx on Ubuntu 18.04, 20.04"
-    apt-get -y remove software-properties-common certbot dnsutils iptables fail2ban
-    apt-get -y remove virt-what curl apt-transport-https ca-certificates gnupg
-    apt -y remove php7.4 php7.4-{cli,gd,mysql,pdo,mbstring,tokenizer,bcmath,xml,fpm,curl,zip} mariadb-server nginx tar unzip git redis-server git wget expect
-    rm -r /usr/local/bin/wings 
+    output "Uninstall Nginx on all supported OS"
+    apt update
+    apt remove maradb-common maraidb-client
+    apt update
+    apt remove php7.4 php7.4-{cli,gd,mysql,pdo,mbstring,tokenizer,bcmath,xml,fpm,curl,zip}
+    apt remove nginx
+    apt remove redis-server
+    apt remove certbot
+    apt remove python3-certbot-nginx
+
     rm -r /usr/local/bin/composer
+    rm -r /etc/letsencrypt/live
     rm -r /var/www/pterodactyl
-    rm -r /etc/nginx/sites-enabled/default 
-    rm -r /etc/systemd/system/wings.service
     rm -r /etc/systemd/system/pteroq.service
-    rm -r /etc/systemd/system/redis.service
-    rm -r /etc/systemd/system/mariadb.service
-    rm -r /etc/systemd/system/mariadb.service.d
-    rm -r /etc/nginx/sites-available/pterodactyl-conf
+    rm -r /etc/nginx/sites-available/pterodactyl.conf
     rm -r /etc/nginx/sites-enabled/pterodactyl.conf
     rm -r /etc/pterodactyl
-    rm -r /srv/daemon-data
-    rm -r /etc/fail2ban
-    rm -r /etc/mysql
-    output "All done... Any issues with [apt / sudo / any other dependencies] please re-run the command and enter [Option 15]"
+    rm -r /usr/local/bin/wings
+    rm -r /etc/systemd/system/wings.service
+
+    mkdir /etc/letsencrypt/live
+
+    systemctl stop redis-server
+    systemctl disable redis-server
+    systemctl stop php7.4-fpm
+    systemctl disable php7.4-fpm
+    systemctl stop nginx
+    systemctl disable nginx
+    systemctl stop pteroq.service
+    systemctl disable pteroq.service
+    systemctl stop --now docker
+    systemctl disable --now docker
+    systemctl stop --now wings
+    systemctl disable --now wings
+
+    pl_ports_2022
+
+    output "All done... Any issues with [apt / sudo / any other dependencies] please re-run the command and enter [Option 20]"
     output ""
     output "Exiting..."
-    webserver_options_exit
+    webserver_options_uninstall_exit
 }
+
+pl_ports_2022 () {
+    output "[1] Deny 2022? \n[2] Allow 2022"
+    read choice
+    case $choice in
+        1 ) pl_ports_deny_2022
+            output "You have denied access to port 2022"
+            output ""
+            ;;
+        2 ) pl_ports_allow_2022
+            output "You have allowed access to port 2022"
+            output ""
+            ;;
+        * ) output "Uninstall : You did not enter a valid selection."
+            pl_ports_2022
+    esac
+}
+
+pl_ports_443 () {
+    output "[1] Deny 443? \n[2] Allow 443"
+    read choice
+    case $choice in
+        1 ) pl_ports_deny_443
+            output "You have denied access to port 443"
+            output ""
+            ;;
+        2 ) pl_ports_allow_443
+            output "You have allowed access to port 443"
+            output ""
+            ;;
+        * ) output "You did not enter a valid selection."
+            pl_ports_443
+    esac
+}
+
+pl_ports_80 () {
+    output "[1] Deny 80? \n[2] Allow 80"
+    read choice
+    case $choice in
+        1 ) pl_ports_deny_80
+            output "You have denied access to port 80"
+            output ""
+            ;;
+        2 ) pl_ports_allow_80
+            output "You have allowed access to port 80"
+            output ""
+            ;;
+        * ) output "You did not enter a valid selection."
+            pl_ports_80
+    esac
+}
+
+pl_ports_8080 () {
+    output "[1] Deny 8080? \n[2] Allow 8080"
+    read choice
+    case $choice in
+        1 ) pl_ports_deny_8080
+            output "You have denied access to port 8080"
+            output ""
+            ;;
+        2 ) pl_ports_allow_8080
+            output "You have allowed access to port 8080"
+            output ""
+            ;;
+        * ) output "You did not enter a valid selection."
+            pl_ports_8080
+    esac
+}
+
+
+pl_ports_allow_2022 () {
+    ufw allow 2022
+    pl_ports_443
+}
+
+pl_ports_deny_2022 () {
+    ufw deny 2022
+    pl_ports_443
+}
+
+pl_ports_allow_443 () {
+    ufw allow 443
+    pl_ports_80
+}
+
+pl_ports_deny_443 () {
+    ufw deny 443
+    pl_ports_80
+}
+
+pl_ports_allow_80 () {
+    ufw allow 80
+    pl_ports_8080
+}
+
+pl_ports_deny_80 () {
+    ufw deny 80
+    pl_ports_8080
+}
+
+pl_ports_allow_8080 () {
+    ufw allow 8080
+    webserver_options_uninstall_exit
+}
+
+pl_ports_deny_8080 () {
+    ufw deny 8080
+    webserver_options_uninstall_exit
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1596,8 +1711,7 @@ case $installoption in
             ;;
         13) webserver_options_exit
             ;;
-        14) webserver_options_uninstall_ptero
-            firewall
+        14) webserver_options_uninstall
             ;;
         15) webserver_options_exit
             ;;
