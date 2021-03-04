@@ -396,7 +396,6 @@ webserver_options_ubuntu_fqdn () {
     if [ "${FQDN_UNINSTALL}" != "${FQDN}" ]; then
         output "Continuing..."
         rm -r /etc/letsencrypt/live/$FDQN
-        
 }
 
 
