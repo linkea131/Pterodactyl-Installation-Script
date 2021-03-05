@@ -353,7 +353,6 @@ webserver_options_ubuntu_nginx () {
     apt remove -y python3-certbot-nginx
 
     rm -r /usr/local/bin/composer
-    rm -r /etc/letsencrypt/live/${FQDN}
     rm -r /var/www/pterodactyl
     rm -r /etc/systemd/system/pteroq.service
     rm -r /etc/nginx/sites-available/pterodactyl.conf
@@ -364,8 +363,6 @@ webserver_options_ubuntu_nginx () {
 
     systemctl stop --now redis-server
     systemctl disable --now redis-server
-   #systemctl stop --now php7.4-fpm
-   #systemctl disable --now php7.4-fpm
     systemctl stop --now pteroq.service
     systemctl disable --now pteroq.service
     systemctl restart --now nginx.service
@@ -552,7 +549,8 @@ webserver_options_ubuntu_fqdn () {
     output "Enter your FQDN to remove the SSL Cert"
     read FQDN_UNINSTALL
     output "Removing files..."
-    rm -r /etc/letsencrypt/live/${FQDN_UNINSTALL}*
+    rm -r /etc/letsencrypt/live/${FQDN_UNINSTALL}
+    output "Succesfully removed ${FQDN_UNINSTALL}.\n If this is a mistake, you can remove the file by going into /etc/letsencrypt/live and removing the domain folder using \n rm -r /etc/letsencrypt/live/<domain> "
     webserver_options_uninstall_exit
 }
 
