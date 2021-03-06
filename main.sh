@@ -310,6 +310,7 @@ upgrade_pterodactyl_php_install_nginx() {
 
 upgrade_pterodactyl_php_install_apache() {
     reset
+    php -v
     output "Do you have PHP 7.3 or 7.4 installed? \n[1] 7.3\n[2] 7.4"
     read choice
     case $choice in
