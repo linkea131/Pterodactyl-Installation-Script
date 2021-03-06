@@ -298,7 +298,7 @@ upgrade_pterodactyl_php_install() {
 upgrade_pterodactyl_php_install_nginx() {
     sed -i -e 's/php7.[0-4]-fpm.sock/php8.0-fpm.sock/' /etc/nginx/sites-available/pterodactyl.conf
     systemctl reload nginx
-    upgrade_pterodactyl_1.3.0_newer
+    upgrade_pterodactyl_panel_install
 }
 
 upgrade_pterodactyl_php_install_apache() {
