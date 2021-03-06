@@ -226,6 +226,7 @@ install_options(){
             ;;
         16 ) installoption=16
             output "You have selected to upgrade to Pterodactyl 1.3.0"
+            wait 2
             ;;
         * ) output "You did not enter a valid selection."
             install_options
@@ -264,7 +265,8 @@ webserver_options() {
 
 
 upgrade_pterodactyl_1.3.0_newer() {
-    output "Do you want to upgrade to PHP 8.0:\n[1] Yes.\n[2] No.\n[3] Exit"
+    reset
+    output "Do you want to upgrade to PHP 8.0:\n\n[1] Yes.\n[2] No.\n[3] Exit"
     read choice
     case $choice in
         1 ) upgrade_pterodactyl_php_install
@@ -279,9 +281,11 @@ upgrade_pterodactyl_1.3.0_newer() {
 }
 
 upgrade_pterodactyl_php_install() {
+    reset
     apt -y update
     apt -y install php8.0 php8.0-{cli,gd,mysql,pdo,mbstring,tokenizer,bcmath,xml,fpm,curl,zip}
     composer self-update --2
+    reset
     output "Do you have NGINX or Apache installed?\n[1] NGINX\n[2] Apache"
     read choice
     case $choice in
@@ -297,12 +301,14 @@ upgrade_pterodactyl_php_install() {
 }
 
 upgrade_pterodactyl_php_install_nginx() {
+    reset
     sed -i -e 's/php7.[0-4]-fpm.sock/php8.0-fpm.sock/' /etc/nginx/sites-available/pterodactyl.conf
     systemctl reload nginx
     upgrade_pterodactyl_panel_install_continue
 }
 
 upgrade_pterodactyl_php_install_apache() {
+    reset
     output "Do you have PHP 7.3 or 7.4 installed? \n[1] 7.3\n[2] 7.4"
     read choice
     case $choice in
@@ -318,6 +324,7 @@ upgrade_pterodactyl_php_install_apache() {
 }
 
 upgrade_pterodactyl_php_install_apache_7.3() {
+    reset
     a2enmod php8.0
     a2dismod php7.3
     upgrade_pterodactyl_panel_install_continue
@@ -325,6 +332,7 @@ upgrade_pterodactyl_php_install_apache_7.3() {
 }
 
 upgrade_pterodactyl_php_install_apache_7.4() {
+    reset
     a2enmod php8.0
     a2dismod php7.4
     output "All done, installing the panel"
@@ -332,6 +340,7 @@ upgrade_pterodactyl_php_install_apache_7.4() {
 }
 
 upgrade_pterodactyl_panel_install() {
+    reset
     php -v
     output "Do you have the correct PHP Version?\n[1] Yes\n[2] No"
     read choice
@@ -349,6 +358,7 @@ upgrade_pterodactyl_panel_install() {
 }
 
 upgrade_pterodactyl_panel_install_continue() {
+    reset
     cd /var/www/pterodactyl
     php artisan down
     curl -L https://github.com/pterodactyl/panel/releases/latest/download/panel.tar.gz | tar -xzv
@@ -360,6 +370,8 @@ upgrade_pterodactyl_panel_install_continue() {
     chown -R www-data:www-data /var/www/pterodactyl/*
     php artisan queue:restart
     php artisan up
+    wait 2
+    reset
     output "Installing wings"
     curl -L -o /usr/local/bin/wings https://github.com/pterodactyl/wings/releases/latest/download/wings_linux_amd64
     chmod u+x /usr/local/bin/wings
