@@ -176,6 +176,8 @@ install_options(){
     output "[14] Uninstall Pterodactyl"
     output ""
     output "[15] Exit Script"
+    output ""
+    output "[16] Upgrade to panel / wings 1.3.0 (Untested script installation)"
 
     read choice
     case $choice in
@@ -221,6 +223,9 @@ install_options(){
         15 ) installoption=15
             output "You have selected to exit the script"
             ;;
+        16 ) installoption=16
+            output "You have selected to upgrade to Pterodactyl 1.3.0"
+            ;;
         * ) output "You did not enter a valid selection."
             install_options
     esac
@@ -257,21 +262,108 @@ webserver_options() {
 
 
 
+upgrade_pterodactyl_1.3.0_newer() {
+    output "Do you want to upgrade to PHP 8.0:\n[1] Yes.\n[2] No.\n[3] Exit"
+    read choice
+    case $choice in
+        1 ) upgrade_pterodactyl_php_install
+            output "You have selected to install PHP 8.0"
+            ;;
+        2 ) upgrade_pterodactyl_panel_install
+            output "You have selected to skip PHP 8.0 and install the panel (1.3.0) and wings (1.3.0)"
+            ;;
+        * ) output "You did not enter a valid selection."
+            upgrade_pterodactyl_1.3.0_newer
+    esac
+}
 
+upgrade_pterodactyl_php_install() {
+    apt -y update
+    apt -y install php8.0 php8.0-{cli,gd,mysql,pdo,mbstring,tokenizer,bcmath,xml,fpm,curl,zip}
+    composer self-update --2
+    output "Do you have NGINX or Apache installed?\n[1] NGINX\n[2] Apache"
+    read choice
+    case $choice in
+        1 ) upgrade_pterodactyl_php_install_nginx
+            output "Upgrading Webserver Config for NGINX"
+            ;;
+        2 ) upgrade_pterodactyl_php_install_apache
+            output "Upgrading Webserver Config for Apache"
+            ;;
+        * ) output "You did not enter a valid selection"
+            upgrade_pterodactyl_php_install
+    esac
+}
 
+upgrade_pterodactyl_php_install_nginx() {
+    sed -i -e 's/php7.[0-4]-fpm.sock/php8.0-fpm.sock/' /etc/nginx/sites-available/pterodactyl.conf
+    systemctl reload nginx
+    upgrade_pterodactyl_1.3.0_newer
+}
 
+upgrade_pterodactyl_php_install_apache() {
+    output "Do you have PHP 7.3 or 7.4 installed? [1] 7.3\n[2] 7.4"
+    read choice
+    case $choice in
+        1 ) upgrade_pterodactyl_php_install_apache_7.3
+            output "Upgrading from 7.3 to 8.0"
+            ;;
+        2 ) upgrade_pterodactyl_php_install_apache_7.4
+            output "Upgrading from 7.4 to 8.0"
+            ;;
+        * ) output "You did not enter a valid selection"
+            upgrade_pterodactyl_php_install_apache
+    esac
+}
 
+upgrade_pterodactyl_php_install_apache_7.3() {
+    a2enmod php8.0
+    a2dismod php7.3
+    output "All done, installing the panel"
+    upgrade_pterodactyl_1.3.0_newer
+}
 
+upgrade_pterodactyl_php_install_apache_7.4() {
+    a2enmod php8.0
+    a2dismod php7.4
+    output "All done, installing the panel"
+    upgrade_pterodactyl_1.3.0_newer
+}
 
+upgrade_pterodactyl_panel_install() {
+    php -v
+    output "Do you have the correct PHP Version?\n[1] Yes\n[2] No"
+    read choice
+    case $choice in
+        1 ) upgrade_pterodactyl_panel_install_continue
+            output "Continuing..."
+            ;;
+        2 ) upgrade_pterodactyl_1.3.0_newer
+            output "Going back..."
+            ;;
+        * ) upgrade_pterodactyl_panel_install
+            output "You did not enter a valid selection"
+            ;;
+    esac
+}
 
-
-
-
-
-
-
-
-
+upgrade_pterodactyl_panel_install_continue() {
+    cd /var/www/pterodactyl
+    php artisan down
+    curl -L https://github.com/pterodactyl/panel/releases/latest/download/panel.tar.gz | tar -xzv
+    chmod -R 755 storage/* bootstrap/cache
+    composer install --no-dev --optimize-autoloader
+    php artisan view:clear
+    php artisan config:clear
+    php artisan migrate --seed --force
+    chown -R www-data:www-data /var/www/pterodactyl/*
+    php artisan queue:restart
+    php artisan up
+    output "Installing wings"
+    curl -L -o /usr/local/bin/wings https://github.com/pterodactyl/wings/releases/latest/download/wings_linux_amd64
+    chmod u+x /usr/local/bin/wings
+    systemctl restart wings
+}
 
 
 
@@ -1771,5 +1863,7 @@ case $installoption in
         14) webserver_options_uninstall
             ;;
         15) webserver_options_exit
+            ;;
+        16) upgrade_pterodactyl_1.3.0_newer
             ;;
 esac
