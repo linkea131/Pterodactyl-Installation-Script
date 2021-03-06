@@ -288,7 +288,7 @@ upgrade_pterodactyl_php_install() {
     composer self-update --2
     reset
     systemctl status apache2
-    systemctl stauts nginx
+    systemctl status nginx
     output "From above, do you have NGINX or Apache installed?\n[1] NGINX\n[2] Apache"
     read choice
     case $choice in
