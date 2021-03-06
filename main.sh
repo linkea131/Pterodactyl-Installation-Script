@@ -13,6 +13,7 @@ WINGS=v1.2.3
 PHPMYADMIN=5.0.4
 
 preflight(){
+    reset
     output "Pterodactyl Installation & Upgrade Script"
     output ""
     output "Please note that this script is meant to be installed on a fresh OS. Installing it on a non-fresh OS may cause problems."
