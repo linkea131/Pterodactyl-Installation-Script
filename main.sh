@@ -284,11 +284,11 @@ upgrade_pterodactyl_php_install() {
     output "Do you have NGINX or Apache installed?\n[1] NGINX\n[2] Apache"
     read choice
     case $choice in
-        1 ) output "Upgrading Webserver Config for NGINX"
-            upgrade_pterodactyl_php_install_nginx
+        1 ) upgrade_pterodactyl_php_install_nginx
+            output "Upgrading Webserver Config for NGINX"
             ;;
-        2 ) output "Upgrading Webserver Config for Apache"
-            upgrade_pterodactyl_php_install_apache
+        2 ) upgrade_pterodactyl_php_install_apache
+            output "Upgrading Webserver Config for Apache"
             ;;
         * ) output "You did not enter a valid selection"
             upgrade_pterodactyl_php_install
