@@ -156,6 +156,7 @@ os_check(){
 }
 
 install_options(){
+    tput reset
     output "Please select your installation option:"
     output ""
     output "[1] Install the panel ${PANEL}."
@@ -302,7 +303,7 @@ upgrade_pterodactyl_php_install_nginx() {
 }
 
 upgrade_pterodactyl_php_install_apache() {
-    output "Do you have PHP 7.3 or 7.4 installed? [1] 7.3\n[2] 7.4"
+    output "Do you have PHP 7.3 or 7.4 installed? \n[1] 7.3\n[2] 7.4"
     read choice
     case $choice in
         1 ) upgrade_pterodactyl_php_install_apache_7.3
@@ -319,8 +320,8 @@ upgrade_pterodactyl_php_install_apache() {
 upgrade_pterodactyl_php_install_apache_7.3() {
     a2enmod php8.0
     a2dismod php7.3
-    output "All done, installing the panel"
     upgrade_pterodactyl_panel_install_continue
+    output "All done, installing the panel"
 }
 
 upgrade_pterodactyl_php_install_apache_7.4() {
