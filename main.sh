@@ -311,7 +311,7 @@ upgrade_pterodactyl_php_install_nginx() {
 upgrade_pterodactyl_php_install_apache() {
     reset
     php -v
-    output "Do you have PHP 7.3 or 7.4 installed? \n[1] 7.3\n[2] 7.4"
+    output "Do you have PHP 7.3 or 7.4 installed? \n[1] 7.3\n[2] 7.4\n[3] 8.0"
     read choice
     case $choice in
         1 ) upgrade_pterodactyl_php_install_apache_7.3
@@ -319,6 +319,9 @@ upgrade_pterodactyl_php_install_apache() {
             ;;
         2 ) upgrade_pterodactyl_php_install_apache_7.4
             output "Upgrading from 7.4 to 8.0"
+            ;;
+        3 ) upgrade_pterodactyl_panel_install_continue
+            output "Skipping to install the panel and wings"
             ;;
         * ) output "You did not enter a valid selection"
             upgrade_pterodactyl_php_install_apache
