@@ -284,11 +284,11 @@ upgrade_pterodactyl_php_install() {
     output "Do you have NGINX or Apache installed?\n[1] NGINX\n[2] Apache"
     read choice
     case $choice in
-        1 ) upgrade_pterodactyl_php_install_nginx
-            output "Upgrading Webserver Config for NGINX"
+        1 ) output "Upgrading Webserver Config for NGINX"
+            upgrade_pterodactyl_php_install_nginx
             ;;
-        2 ) upgrade_pterodactyl_php_install_apache
-            output "Upgrading Webserver Config for Apache"
+        2 ) output "Upgrading Webserver Config for Apache"
+            upgrade_pterodactyl_php_install_apache
             ;;
         * ) output "You did not enter a valid selection"
             upgrade_pterodactyl_php_install
@@ -298,7 +298,7 @@ upgrade_pterodactyl_php_install() {
 upgrade_pterodactyl_php_install_nginx() {
     sed -i -e 's/php7.[0-4]-fpm.sock/php8.0-fpm.sock/' /etc/nginx/sites-available/pterodactyl.conf
     systemctl reload nginx
-    upgrade_pterodactyl_panel_install
+    upgrade_pterodactyl_panel_install_continue
 }
 
 upgrade_pterodactyl_php_install_apache() {
@@ -320,14 +320,14 @@ upgrade_pterodactyl_php_install_apache_7.3() {
     a2enmod php8.0
     a2dismod php7.3
     output "All done, installing the panel"
-    upgrade_pterodactyl_1.3.0_newer
+    upgrade_pterodactyl_panel_install_continue
 }
 
 upgrade_pterodactyl_php_install_apache_7.4() {
     a2enmod php8.0
     a2dismod php7.4
     output "All done, installing the panel"
-    upgrade_pterodactyl_1.3.0_newer
+    upgrade_pterodactyl_panel_install_continue
 }
 
 upgrade_pterodactyl_panel_install() {
