@@ -156,7 +156,7 @@ os_check(){
 }
 
 install_options(){
-    tput reset
+    reset
     output "Please select your installation option:"
     output ""
     output "[1] Install the panel ${PANEL}."
