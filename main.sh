@@ -18,7 +18,6 @@ preflight(){
     output ""
     output "Please note that this script is meant to be installed on a fresh OS. Installing it on a non-fresh OS may cause problems."
     output "Automatic operating system detection initialized..."
-    sleep 5
 
     os_check
 
@@ -32,11 +31,13 @@ preflight(){
     if [ ${MACHINE_TYPE} == 'x86_64' ]; then
         output "64-bit server detected! Good to go."
         output ""
+        output "Continuing in 5 seconds"
+        sleep 5
+        reset
     else
         output "Unsupported architecture detected! Please switch to 64-bit (x86_64)."
         exit 4
     fi
-
     output "Automatic virtualization detection initialized..."
     if [ "$lsb_dist" =  "ubuntu" ]; then
         apt-get update --fix-missing
@@ -59,9 +60,10 @@ preflight(){
     elif [ "$virt_serv" = "xen xen-hvm aws" ]; then
         output "Virtualization: Xen-HVM on AWS detected."
         warn "When creating allocations for this node, please use the internal IP as Google Cloud uses NAT routing."
-        warn "Resuming in 10 seconds..."
-        sleep 10
+        warn "Resuming in 5 seconds..."
+        sleep 5
     else
+        reset
         output "Virtualization: $virt_serv detected."
     fi
     output ""
@@ -79,7 +81,7 @@ preflight(){
         esac
         output ""
     fi
-
+    reset
     output "Kernel detection initialized..."
     if echo $(uname -r) | grep -q xxxx; then
         output "OVH kernel detected. This script will not work. Please reinstall your server using a generic/distribution kernel."
@@ -99,8 +101,8 @@ preflight(){
         warn "Please make sure you have a static IP setup, otherwise the system will not work after a reboot."
         warn "Please also make sure the GCP firewall allows the ports needed for the server to function normally."
         warn "When creating allocations for this node, please use the internal IP as Google Cloud uses NAT routing."
-        warn "Resuming in 10 seconds..."
-        sleep 10
+        warn "Resuming in 5 seconds..."
+        sleep 5
     else
         output "Did not detect any bad kernel. Moving forward..."
         output ""
