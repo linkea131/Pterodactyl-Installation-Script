@@ -288,8 +288,8 @@ upgrade_pterodactyl_php_install() {
     apt -y install php8.0 php8.0-{cli,gd,mysql,pdo,mbstring,tokenizer,bcmath,xml,fpm,curl,zip}
     composer self-update --2
     reset
-    service nginx status
-    service apache2 status
+    #service nginx status
+    #service apache2 status
     output "From above, do you have NGINX or Apache installed?\n[1] NGINX\n[2] Apache"
     read choice
     case $choice in
