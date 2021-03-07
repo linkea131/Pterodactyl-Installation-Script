@@ -31,9 +31,8 @@ preflight(){
     if [ ${MACHINE_TYPE} == 'x86_64' ]; then
         output "64-bit server detected! Good to go."
         output ""
-        output "Continuing in 5 seconds"
-        sleep 5
-        reset
+        output "Continuing in 10 seconds"
+        sleep 10
     else
         output "Unsupported architecture detected! Please switch to 64-bit (x86_64)."
         exit 4
