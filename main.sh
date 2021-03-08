@@ -178,9 +178,13 @@ install_options(){
     output "[13] Install / Uninstall OpenVPN (NOT FUNCTIONAL)"
     output "[14] Uninstall Pterodactyl"
     output ""
+    output ""
     output "[15] Exit Script"
     output ""
-    output "[16] Upgrade to panel / wings 1.3.0 (Untested script installation)"
+    output ""
+    output "[16] Upgrade to panel v1.3.1 and wings v1.3.1 (Untested script installation)"
+    output ""
+    output "[17] Install Pterodactyl Panel v1.3.1 and wings v1.3.1."
 
     read choice
     case $choice in
@@ -227,8 +231,11 @@ install_options(){
             output "You have selected to exit the script"
             ;;
         16 ) installoption=16
-            output "You have selected to upgrade to Pterodactyl 1.3.0"
+            output "You have selected to upgrade to Pterodactyl 1.3.1"
             wait 2
+            ;;
+        17 ) installoption=17
+            output "You have selected to install Pterodactyl 1.3.1"
             ;;
         * ) output "You did not enter a valid selection."
             install_options
@@ -288,8 +295,9 @@ upgrade_pterodactyl_php_install() {
     apt -y install php8.0 php8.0-{cli,gd,mysql,pdo,mbstring,tokenizer,bcmath,xml,fpm,curl,zip}
     composer self-update --2
     reset
-    #service nginx status
-    #service apache2 status
+    service nginx status
+    service apache2 status
+    output " "
     output "From above, do you have NGINX or Apache installed?\n[1] NGINX\n[2] Apache"
     read choice
     case $choice in
