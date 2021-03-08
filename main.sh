@@ -273,7 +273,7 @@ webserver_options() {
 
 
 
-upgrade_pterodactyl_1.3.0_newer() {
+upgrade_pterodactyl_1.3.1_newer() {
     reset
     output "Do you want to upgrade to PHP 8.0:\n\n[1] Yes.\n[2] No.\n[3] Exit"
     read choice
@@ -285,7 +285,7 @@ upgrade_pterodactyl_1.3.0_newer() {
             output "You have selected to skip PHP 8.0 and install the panel (1.3.0) and wings (1.3.0)"
             ;;
         * ) output "You did not enter a valid selection."
-            upgrade_pterodactyl_1.3.0_newer
+            upgrade_pterodactyl_1.3.1_newer
     esac
 }
 
@@ -364,7 +364,7 @@ upgrade_pterodactyl_panel_install() {
         1 ) upgrade_pterodactyl_panel_install_continue
             output "Continuing..."
             ;;
-        2 ) upgrade_pterodactyl_1.3.0_newer
+        2 ) upgrade_pterodactyl_1.3.1_newer
             output "Going back..."
             ;;
         * ) upgrade_pterodactyl_panel_install
@@ -1893,6 +1893,6 @@ case $installoption in
             ;;
         15) webserver_options_exit
             ;;
-        16) upgrade_pterodactyl_1.3.0_newer
+        16) upgrade_pterodactyl_1.3.1_newer
             ;;
 esac
