@@ -1841,47 +1841,46 @@ broadcast_database(){
         output "Password: $adminpassword"
 }
 
-#Execution
 preflight
 install_options
 case $installoption in 
-        1)   webserver_options
-             repositories_setup
-             required_infos
-             firewall
-             setup_pterodactyl
-             broadcast
-	     broadcast_database
+        1)  webserver_options
+            repositories_setup
+            required_infos
+            firewall
+            setup_pterodactyl
+            broadcast
+	        broadcast_database
              ;;
-        2)   repositories_setup
-             required_infos
-             firewall
-             ssl_certs
-             install_wings
-             broadcast
-	     broadcast_database
+        2)  repositories_setup
+            required_infos
+            firewall
+            ssl_certs
+            install_wings
+            broadcast
+	        broadcast_database
              ;;
-        3)   webserver_options
-             repositories_setup
-             required_infos
-             firewall
-             ssl_certs
-             setup_pterodactyl
-             install_wings
-             broadcast
+        3)  webserver_options
+            repositories_setup
+            required_infos
+            firewall
+            ssl_certs
+            setup_pterodactyl
+            install_wings
+            broadcast
              ;;
-        4)   install_standalone_sftp
+        4)  install_standalone_sftp
              ;;
-        5)   upgrade_pterodactyl
+        5)  upgrade_pterodactyl
              ;;
         6)  migrate_wings
              ;;
         7)  upgrade_pterodactyl_1.0
-             migrate_wings
+            migrate_wings
              ;;
         9)  upgrade_standalone_sftp
              ;;
-        10)  install_phpmyadmin
+        10) install_phpmyadmin
              ;;
         11) curl -sSL https://raw.githubusercontent.com/tommytran732/MariaDB-Root-Password-Reset/master/mariadb-104.sh | sudo bash
             ;;
