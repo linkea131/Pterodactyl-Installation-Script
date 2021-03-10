@@ -382,7 +382,7 @@ upgrade_pterodactyl_panel_install_continue() {
     output "Where is your Pterodactyl Panel folder located? (Default location is /var/www/pterodactyl)\n\nPlease make sure that you include the / before the first folder name as shown below\n(Correct - /var/www/pterodactyl) (Incorrect - var/www/pterodactyl)"
     read choice
     case $choice
-    cd $choice
+    cd ${choice}
     php artisan down
     curl -L https://github.com/pterodactyl/panel/releases/latest/download/panel.tar.gz | tar -xzv
     chmod -R 755 storage/* bootstrap/cache
