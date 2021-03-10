@@ -137,7 +137,7 @@ os_check(){
     elif [ "$lsb_dist" = "centos" ]; then
         if [ "$dist_version" != "8" ]; then
             output "Unsupported CentOS version. Only CentOS Stream and 8 are supported."
-            exit 2
+            install_options
         fi
     elif [ "$lsb_dist" = "rhel" ]; then
         if  [ $dist_version != "8" ]; then
@@ -1183,7 +1183,6 @@ server {
     # allow larger file uploads and longer script runtimes
     client_max_body_size 100m;
     client_body_timeout 120s;
-
     sendfile off;
     # strengthen ssl security
     ssl_certificate /etc/letsencrypt/live/'"$FQDN"'/fullchain.pem;
@@ -1192,7 +1191,6 @@ server {
     ssl_prefer_server_ciphers on;
     ssl_session_cache shared:SSL:10m;
     ssl_ciphers "EECDH+AESGCM:EDH+AESGCM:ECDHE-RSA-AES128-GCM-SHA256:AES256+EECDH:DHE-RSA-AES128-GCM-SHA256:AES256+EDH:ECDHE-RSA-AES256-GCM-SHA384:DHE-RSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-SHA384:ECDHE-RSA-AES128-SHA256:ECDHE-RSA-AES256-SHA:ECDHE-RSA-AES128-SHA:DHE-RSA-AES256-SHA256:DHE-RSA-AES128-SHA256:DHE-RSA-AES256-SHA:DHE-RSA-AES128-SHA:ECDHE-RSA-DES-CBC3-SHA:EDH-RSA-DES-CBC3-SHA:AES256-GCM-SHA384:AES128-GCM-SHA256:AES256-SHA256:AES128-SHA256:AES256-SHA:AES128-SHA:DES-CBC3-SHA:HIGH:!aNULL:!eNULL:!EXPORT:!DES:!MD5:!PSK:!RC4";
-
     # See the link below for more SSL information:
     #     https://raymii.org/s/tutorials/Strong_SSL_Security_On_nginx.html
     #
@@ -1358,7 +1356,6 @@ install_wings() {
 [Unit]
 Description=Pterodactyl Wings Daemon
 After=docker.service
-
 [Service]
 User=root
 WorkingDirectory=/etc/pterodactyl
@@ -1367,7 +1364,6 @@ PIDFile=/var/run/wings/daemon.pid
 ExecStart=/usr/local/bin/wings
 Restart=on-failure
 StartLimitInterval=600
-
 [Install]
 WantedBy=multi-user.target
 EOF
@@ -1389,7 +1385,6 @@ migrate_wings(){
 [Unit]
 Description=Pterodactyl Wings Daemon
 After=docker.service
-
 [Service]
 User=root
 WorkingDirectory=/etc/pterodactyl
@@ -1398,7 +1393,6 @@ PIDFile=/var/run/wings/daemon.pid
 ExecStart=/usr/local/bin/wings
 Restart=on-failure
 StartLimitInterval=600
-
 [Install]
 WantedBy=multi-user.target
 EOF
