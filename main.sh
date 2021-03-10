@@ -183,9 +183,7 @@ install_options(){
     output "--------------------------------------------------"
     output ""
     output "[16] Upgrade to panel v1.3.1 and wings v1.3.1 (Untested script installation)"
-    output ""
-    output "[17] Install Pterodactyl Panel v1.3.1 and wings v1.3.1."
-
+    
     read choice
     case $choice in
         1 ) installoption=1
@@ -235,7 +233,7 @@ install_options(){
             wait 2
             ;;
         17 ) installoption=17
-            output "You have selected to install Pterodactyl 1.3.1"
+            output "This is an unsupport protocol... please retry later!"
             ;;
         * ) output "You did not enter a valid selection."
             install_options
@@ -373,9 +371,18 @@ upgrade_pterodactyl_panel_install() {
     esac
 }
 
+
+
+   virt_serv=$(echo $(virt-what))
+    if [ "$virt_serv" = "" ]; then
+
+
 upgrade_pterodactyl_panel_install_continue() {
     reset
-    cd /var/www/pterodactyl
+    output "Where is your Pterodactyl Panel folder located? (Default location is /var/www/pterodactyl)\n\nPlease make sure that you include the / before the first folder name as shown below\n(Correct - /var/www/pterodactyl) (Incorrect - var/www/pterodactyl)"
+    read choice
+    case $choice
+    cd $choice
     php artisan down
     curl -L https://github.com/pterodactyl/panel/releases/latest/download/panel.tar.gz | tar -xzv
     chmod -R 755 storage/* bootstrap/cache
