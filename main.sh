@@ -10,7 +10,7 @@ warn(){
 
 PANEL=v1.3.1
 WINGS=v1.3.1
-PHPMYADMIN=5.0.4
+PHPMYADMIN=5.1.0
 
 preflight(){
     reset
@@ -100,7 +100,7 @@ preflight(){
         warn "Please make sure you have a static IP setup, otherwise the system will not work after a reboot."
         warn "Please also make sure the GCP firewall allows the ports needed for the server to function normally."
         warn "When creating allocations for this node, please use the internal IP as Google Cloud uses NAT routing."
-        warn "Resuming in 5 seconds..."
+        warn "Reconstructing layout plan..."
         sleep 5
     else
         output "Did not detect any bad kernel. Moving forward..."
@@ -135,7 +135,7 @@ os_check(){
             exit 2
         fi
     elif [ "$lsb_dist" = "centos" ]; then
-        if [ "$dist_version" != "8" ]; then
+        if [ "$dist_version" != "8" ] && [ "$dist_version" != "7" ]; then
             output "Unsupported CentOS version. Only CentOS Stream and 8 are supported."
             install_options
         fi
@@ -273,6 +273,7 @@ webserver_options() {
 
 upgrade_pterodactyl_1.3.1_newer() {
     reset
+    php -v
     output "Do you want to upgrade to PHP 8.0:\n\n[1] Yes.\n[2] No.\n[3] Exit"
     read choice
     case $choice in
@@ -379,8 +380,12 @@ upgrade_pterodactyl_panel_install() {
 
 upgrade_pterodactyl_panel_install_continue() {
     reset
-    #output "Where is your Pterodactyl Panel folder located? (Default location is /var/www/pterodactyl)\n\nPlease make sure that you include the / before the first folder name as shown below\n(Correct - /var/www/pterodactyl) (Incorrect - var/www/pterodactyl)"
-    cd /var/www/pterodactyl
+    output "Where is your Pterodactyl Panel folder located? (Default location is /var/www/pterodactyl)\n\nPlease make sure that you include the / before the first folder name as shown below\n(Correct - /var/www/pterodactyl) (Incorrect - var/www/pterodactyl)"
+    read PANEL_CHOICE
+    output "Reading choice..."
+    output " "
+    output "Continuing to installing the new panel"
+    cd /var/www/${PANEL_CHOICE}
     php artisan down
     curl -L https://github.com/pterodactyl/panel/releases/latest/download/panel.tar.gz | tar -xzv
     chmod -R 755 storage/* bootstrap/cache
