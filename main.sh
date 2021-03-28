@@ -374,8 +374,8 @@ upgrade_pterodactyl_panel_install() {
 
 
 
-   virt_serv=$(echo $(virt-what))
-    if [ "$virt_serv" = "" ]; then
+   #virt_serv=$(echo $(virt-what))
+    #if [ "$virt_serv" = "" ]; then
 
 
 upgrade_pterodactyl_panel_install_continue() {
