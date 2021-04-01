@@ -728,14 +728,15 @@ dns_check(){
     read FQDN
 
     output "Resolving DNS..."
-    SERVER_IP=$(dig +short myip.opendns.com @resolver1.opendns.com)
+    SERVER_IP=$(curl ifconfig.me)
     DOMAIN_RECORD=$(dig +short ${FQDN})
     if [ "${SERVER_IP}" != "${DOMAIN_RECORD}" ]; then
         output ""
         output "Failed to register to domain"
-        output "The entered domain does not resolve to the primary public IP of this server."
+	output "------------------------------------------------------"
         output "Please make an A record pointing to your server's IP."
         output "If you are using Cloudflare, please disable the orange cloud."
+	output "------------------------------------------------------"
         dns_check
     else
         output "Domain resolved correctly"
@@ -1366,6 +1367,8 @@ install_wings() {
 [Unit]
 Description=Pterodactyl Wings Daemon
 After=docker.service
+Requires=docker.service
+PartOf=docker.service
 [Service]
 User=root
 WorkingDirectory=/etc/pterodactyl
@@ -1377,7 +1380,7 @@ StartLimitInterval=600
 [Install]
 WantedBy=multi-user.target
 EOF
-
+    systemctl restart wings
     systemctl enable wings
     systemctl start wings
     output "Wings ${WINGS} has now been installed on your system."
@@ -1395,6 +1398,8 @@ migrate_wings(){
 [Unit]
 Description=Pterodactyl Wings Daemon
 After=docker.service
+Requires=docker.service
+PartOf=docker.service
 [Service]
 User=root
 WorkingDirectory=/etc/pterodactyl
@@ -1629,9 +1634,7 @@ firewall(){
     systemctl enable fail2ban
     bash -c 'cat > /etc/fail2ban/jail.local' <<-'EOF'
 [DEFAULT]
-# Ban hosts for ten hours:
 bantime = 36000
-# Override /etc/fail2ban/jail.d/00-firewalld.conf:
 banaction = iptables-multiport
 [sshd]
 enabled = true
@@ -1655,6 +1658,7 @@ EOF
             ufw allow 8080
             ufw allow 2022
             ufw allow 443
+	    ufw allow 3306
         elif [ "$installoption" = "4" ]; then
             ufw allow 80
             ufw allow 8080
@@ -1806,7 +1810,7 @@ install_database() {
 }
 
 database_host_reset(){
-    SERVER_IP=$(curl -s http://checkip.amazonaws.com)
+    SERVER_IP=$(curl ifconfig.me)
     adminpassword=`cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1`
     Q0="SET old_passwords=0;"
     Q1="SET PASSWORD FOR 'admin'@'$SERVER_IP' = PASSWORD('$adminpassword');"
