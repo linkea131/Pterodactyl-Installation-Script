@@ -110,6 +110,7 @@ preflight(){
     else
         output "Did not detect any bad kernel. Moving forward..."
         output ""
+        install_options
     fi
 }
 
@@ -1494,3 +1495,14 @@ case $install_option in
             dns_check_check
             ;;
 esac
+
+
+
+
+
+
+
+
+
+
+
