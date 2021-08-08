@@ -373,19 +373,15 @@ upgrade_pterodactyl_panel_install() {
 }
 
 
-
-   #virt_serv=$(echo $(virt-what))
-    #if [ "$virt_serv" = "" ]; then
-
-
 upgrade_pterodactyl_panel_install_continue() {
     reset
     output "Where is your Pterodactyl Panel folder located? (Default location is /var/www/pterodactyl)\n\nPlease make sure that you include the / before the first folder name as shown below\n(Correct - /var/www/pterodactyl) (Incorrect - var/www/pterodactyl)"
     read PANEL_CHOICE
     output "Reading choice..."
     output " "
+    wait 2
     output "Continuing to installing the new panel"
-    cd /var/www/${PANEL_CHOICE}
+    cd ${PANEL_CHOICE}
     php artisan down
     curl -L https://github.com/pterodactyl/panel/releases/latest/download/panel.tar.gz | tar -xzv
     chmod -R 755 storage/* bootstrap/cache
@@ -504,55 +500,6 @@ webserver_options_ubuntu_nginx () {
 
     pl_ports_2022
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 pl_ports_2022 () {
@@ -677,45 +624,13 @@ pl_ports_deny_8080 () {
 
 
 webserver_options_ubuntu_fqdn () {
-    output "Enter your FQDN to remove the SSL Cert"
+    output "Enter your FQDN (Domain) to remove the SSL Cert"
     read FQDN_UNINSTALL
     output "Removing files..."
     rm -r /etc/letsencrypt/live/${FQDN_UNINSTALL}
     output "Succesfully removed ${FQDN_UNINSTALL}.\n If this is a mistake, you can remove the file by going into /etc/letsencrypt/live and removing the domain folder using \n rm -r /etc/letsencrypt/live/<domain> "
     webserver_options_uninstall_exit
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 required_infos() {
     output "Please enter the desired user email address:"
