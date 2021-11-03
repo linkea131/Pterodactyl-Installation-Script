@@ -8,9 +8,9 @@ warn(){
     echo -e '\e[31m'$1'\e[0m';
 }
 
-PANEL=v1.3.1
-WINGS=v1.3.1
-PHPMYADMIN=5.1.0
+PANEL=v1.6.3
+WINGS=v1.5.3
+PHPMYADMIN=5.1.1
 
 preflight(){
     reset
@@ -1152,7 +1152,7 @@ server {
 }
 ' | sudo -E tee /etc/nginx/conf.d/pterodactyl.conf >/dev/null 2>&1
 
-    service nginx restart
+    systemctl restart nginx
     chown -R nginx:nginx $(pwd)
     semanage fcontext -a -t httpd_sys_rw_content_t "/var/www/pterodactyl/storage(/.*)?"
     restorecon -R /var/www/pterodactyl
