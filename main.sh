@@ -442,11 +442,6 @@ webserver_options_uninstall_apache () {
     output "Uninstalling Apache2 on all supported OS"
 
     apt update -y
-    apt remove -y php7.4 php7.4-{cli,gd,mysql,pdo,mbstring,tokenizer,bcmath,xml,fpm,curl,zip}
-    apt remove -y redis-server
-    apt remove -y python3-certbot-apache
-
-    rm -r /usr/local/bin/composer
     rm -r /var/www/pterodactyl
     rm -r /etc/systemd/system/pteroq.service
     rm -r /etc/apache2/sites-available/pterodactyl.conf
@@ -456,16 +451,10 @@ webserver_options_uninstall_apache () {
     rm -r /etc/systemd/system/wings.service
 
 
-    systemctl stop --now redis-server
-    systemctl disable --now redis-server
     systemctl stop --now pteroq.service
     systemctl disable --now pteroq.service
-    systemctl restart --now apache2.service
-    systemctl stop --now docker.service
-    systemctl disable --now docker.service
     systemctl stop --now wings.service
     systemctl disable --now wings.service
-
     pl_ports_2022
 }
 
@@ -475,11 +464,6 @@ webserver_options_ubuntu_nginx () {
     output "Uninstall Nginx on all supported OS"
 
     apt update -y
-    apt remove -y php7.4 php7.4-{cli,gd,mysql,pdo,mbstring,tokenizer,bcmath,xml,fpm,curl,zip}
-    apt remove -y redis-server
-    apt remove -y python3-certbot-nginx
-
-    rm -r /usr/local/bin/composer
     rm -r /var/www/pterodactyl
     rm -r /etc/systemd/system/pteroq.service
     rm -r /etc/nginx/sites-available/pterodactyl.conf
@@ -488,13 +472,8 @@ webserver_options_ubuntu_nginx () {
     rm -r /usr/local/bin/wings
     rm -r /etc/systemd/system/wings.service
 
-    systemctl stop --now redis-server
-    systemctl disable --now redis-server
     systemctl stop --now pteroq.service
     systemctl disable --now pteroq.service
-    systemctl restart --now nginx.service
-    systemctl stop --now docker
-    systemctl disable --now docker
     systemctl stop --now wings
     systemctl disable --now wings
 
