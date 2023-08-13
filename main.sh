@@ -26,15 +26,15 @@ preflight(){
         exit 3
     fi
 
-    output "Automatic architecture detection initialized..."
+    output "自动架构检测已初始化..."
     MACHINE_TYPE=`uname -m`
     if [ ${MACHINE_TYPE} == 'x86_64' ]; then
-        output "64-bit server detected! Good to go."
+        output "64-bit 检测到支持架构安装将继续."
         output ""
-        output "Continuing in 10 seconds"
+        output "10秒后继续"
         sleep 10
     else
-        output "Unsupported architecture detected! Please switch to 64-bit (x86_64)."
+        output "检测到不支持的架构！请切换到 64-bit (x86_64)."
         exit 4
     fi
     output "Automatic virtualization detection initialized..."
