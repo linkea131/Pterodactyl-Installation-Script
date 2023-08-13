@@ -51,19 +51,19 @@ preflight(){
     fi
     virt_serv=$(echo $(virt-what))
     if [ "$virt_serv" = "" ]; then
-        output "Virtualization: Bare Metal detected."
+        output "虚拟化: 检测到裸机."
     elif [ "$virt_serv" = "openvz lxc" ]; then
-        output "Virtualization: OpenVZ 7 detected."
+        output "虚拟化: 检测到 OpenVZ 7."
     elif [ "$virt_serv" = "xen xen-hvm" ]; then
-        output "Virtualization: Xen-HVM detected."
+        output "虚拟化: 检测到 Xen-HVM."
     elif [ "$virt_serv" = "xen xen-hvm aws" ]; then
-        output "Virtualization: Xen-HVM on AWS detected."
-        warn "When creating allocations for this node, please use the internal IP as Google Cloud uses NAT routing."
-        warn "Resuming in 5 seconds..."
+        output "虚拟化: 检测到 Xen-HVM on AWS."
+        warn "为此节点创建分配时，请使用内部 IP，因为 Google Cloud 使用 NAT 路由."
+        warn "5秒后恢复..."
         sleep 5
     else
         reset
-        output "Virtualization: $virt_serv detected."
+        output "虚拟化: $virt_serv 检测到."
     fi
     output ""
     if [ "$virt_serv" != "" ] && [ "$virt_serv" != "kvm" ] && [ "$virt_serv" != "vmware" ] && [ "$virt_serv" != "hyperv" ] && [ "$virt_serv" != "openvz lxc" ] && [ "$virt_serv" != "xen xen-hvm" ] && [ "$virt_serv" != "xen xen-hvm aws" ]; then
