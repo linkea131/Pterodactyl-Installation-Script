@@ -1788,11 +1788,11 @@ case $installoption in
             ;;
         12) database_host_reset
             ;;
-        13) webserver_options_exit
+        13) exit
             ;;
         14) webserver_options_uninstall
             ;;
-        15) webserver_options_exit
+        15) exit
             ;;
         16) upgrade_pterodactyl_1.3.1_newer
             ;;
