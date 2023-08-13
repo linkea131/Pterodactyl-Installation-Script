@@ -1,9 +1,9 @@
-# Pterodactyl-Installation-Script
-<br><b> WARNING, THE SCRIPT MAY OR MAY NOT WORK!<br> UPDATES ARE UNDERWAY! </b>
-<p>The quick way</p> <br /> 
-A public installation script for Pterodactyl Panel and Daemon <br /> 
+# Pterodactyl-一键搭建-脚本
+<br><b> 警告，该脚本可能有效，也可能无效!<br> 更新正在进行中! </b>
+<p>快速的方法</p> <br /> 
+Pterodactyl 脚本可快速安装Panel 和 Daemon <br /> 
 
-``git clone https://github.com/ItsLeon15/Pterodactyl-Installation-Script.git``
+``git clone https://github.com/linkea131/Pterodactyl-Installation-Script.git``
 
 ``cd Pterodactyl-Installation-Script``
 
@@ -11,12 +11,12 @@ A public installation script for Pterodactyl Panel and Daemon <br />
 
 ``./main.sh``
 
-<i>Any questions, message me on Discord - ItsLeon#4371<i>
+<i>如有任何疑问，请在 Discord 上给我留言 - ItsLeon#4371<i>
 
-<h3>New updates</h3>
-- Fixed bugs when verifying domain name<br>
-- All future releases of Pterodactyl to be installed<br>
+<h3>新更新</h3>
+- 修复了验证域名时的错误<br>
+- 将安装 Pterodactyl 的所有未来版本<br>
 
-<h3>New features in the upcoming term</h3>
-- OpenVPN Installation<br>
-- New and improved UI<br>
+<h3>下一期的新功能</h3>
+- OpenVPN 安装<br>
+- 新的和改进的用户界面<br>
