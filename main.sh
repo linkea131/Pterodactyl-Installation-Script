@@ -8,8 +8,8 @@ warn(){
     echo -e '\e[31m'$1'\e[0m';
 }
 
-PANEL=v1.6.3
-WINGS=v1.5.3
+PANEL=v1.11.3
+WINGS=v1.11.7
 PHPMYADMIN=5.1.1
 
 preflight(){
