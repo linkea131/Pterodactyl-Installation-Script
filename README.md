@@ -3,9 +3,9 @@
 <p>快速的方法</p> <br /> 
 Pterodactyl 脚本可快速安装Panel 和 Daemon <br /> 
 
-``git clone https://github.com/linkea131/Pterodactyl-Installation-Script.git``
+``git clone https://github.com/linkea131/Pterodactyl-install.git``
 
-``cd Pterodactyl-Installation-Script``
+``cd Pterodactyl-install``
 
 ``chmod +x main.sh``
 
