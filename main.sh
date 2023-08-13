@@ -1656,14 +1656,14 @@ install_database() {
 	    dnf -y install MariaDB-server
 	fi
 
-    output "Creating the databases and setting root password..."
+    output "创建数据库并设置root密码..."
     password=`cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1`
     adminpassword=`cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1`
     rootpassword=`cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1`
-    Q0="DROP DATABASE IF EXISTS test;"
-    Q1="CREATE DATABASE IF NOT EXISTS panel;"
-    Q2="SET old_passwords=0;"
-    Q3="GRANT ALL ON panel.* TO 'pterodactyl'@'127.0.0.1' IDENTIFIED BY '$password';"
+    Q0="如果存在则删除数据库测试;"
+    Q1="如果不存在则创建数据库 panel;"
+    Q2="设置 old_passwords=0;"
+    Q3="全部授予 panel.* TO 'pterodactyl'@'127.0.0.1' 鉴定人 '$password';"
     Q4="GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, ALTER, INDEX, DROP, EXECUTE, PROCESS, RELOAD, LOCK TABLES, CREATE USER ON *.* TO 'admin'@'$SERVER_IP' IDENTIFIED BY '$adminpassword' WITH GRANT OPTION;"
     Q5="SET PASSWORD FOR 'root'@'localhost' = PASSWORD('$rootpassword');"
     Q6="DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1');"
