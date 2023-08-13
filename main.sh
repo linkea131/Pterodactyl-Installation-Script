@@ -259,18 +259,6 @@ webserver_options() {
     esac
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
 upgrade_pterodactyl_1.3.1_newer() {
     reset
     php -v
@@ -399,21 +387,6 @@ upgrade_pterodactyl_panel_install_continue() {
     chmod u+x /usr/local/bin/wings
     systemctl restart wings
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 webserver_options_uninstall_exit() {
     exit
