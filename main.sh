@@ -14,15 +14,15 @@ PHPMYADMIN=5.1.1
 
 preflight(){
     reset
-    output "Pterodactyl Installation & Upgrade Script"
+    output "Pterodactyl 安装 & 升级脚本"
     output ""
-    output "Please note that this script is meant to be installed on a fresh OS. Installing it on a non-fresh OS may cause problems."
-    output "Automatic operating system detection initialized..."
+    output "请注意，此脚本旨在安装在新的操作系统上。在非新操作系统上安装它可能会导致问题."
+    output "自动化系统检测已初始化..."
 
     os_check
 
     if [ "$EUID" -ne 0 ]; then
-        output "Please re-run as root."
+        output "请使用 root."
         exit 3
     fi
 
