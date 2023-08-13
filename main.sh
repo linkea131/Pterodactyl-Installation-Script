@@ -37,7 +37,7 @@ preflight(){
         output "检测到不支持的架构！请切换到 64-bit (x86_64)."
         exit 4
     fi
-    output "Automatic virtualization detection initialized..."
+    output "自动虚拟化检测已初始化..."
     if [ "$lsb_dist" =  "ubuntu" ]; then
         apt-get update --fix-missing
         apt-get -y install software-properties-common
